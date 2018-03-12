@@ -1,6 +1,6 @@
 import {ErrorWithData} from "../../utils/error";
 
-export const updateUserProfileApi = ({userId, userUpdate, authToken, apiHost, apiKey}) => {
+export const updateUserProfileApi = ({userId, userUpdate, authToken, apiHost, apiKey, appName}) => {
     return new Promise(async (resolve, reject) => {
         const url = `${apiHost}/users/${userId}/profile`;
         const errorMsg = 'Could not update user';
@@ -9,7 +9,8 @@ export const updateUserProfileApi = ({userId, userUpdate, authToken, apiHost, ap
             headers: {
                 'Content-Type': 'application/json',
                 'X-Api-Key': apiKey,
-                'Authorization': `Bearer ${authToken}`
+                'Authorization': `Bearer ${authToken}`,
+                'User-Agent': `n-user-api-client-${appName}`
             },
             method: 'PUT',
             body: JSON.stringify(userUpdate)

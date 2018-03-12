@@ -1,9 +1,9 @@
 import {ErrorWithData} from '../../utils/error';
 
-export const updateUserPasswordApi = ({userId, passwordData, authToken, apiHost, apiKey}) => {
+export const updateUserPasswordApi = ({userId, passwordData, authToken, apiHost, apiKey, appName}) => {
     return new Promise(async (resolve, reject) => {
         const errorMsg = 'Could not change user password';
-        const url = `${apiHost}/users/${userId}/credentials/change-password`;
+        const url = `${apiHost}/v1/users/${userId}/credentials/change-password`;
         const body = {
             password: passwordData.newPassword,
             oldPassword: passwordData.oldPassword,
@@ -14,7 +14,8 @@ export const updateUserPasswordApi = ({userId, passwordData, authToken, apiHost,
             headers: {
                 'Content-Type': 'application/json',
                 'X-Api-Key': apiKey,
-                'Authorization': `Bearer ${authToken}`
+                'Authorization': `Bearer ${authToken}`,
+                'User-Agent': `n-user-api-client-${appName}`
             },
             method: 'POST',
             body: JSON.stringify(body)

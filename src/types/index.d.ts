@@ -46,11 +46,19 @@ export interface UserObject {
 }
 
 export interface UpdateUserOptions {
-    session: string,
     apiHost: string,
     apiKey: string,
     apiClientId: string,
+    appName: string
+    session: string,
     userId: string,
     passwordData?: any,
-    userUpdate?: any
+    userUpdate?: any,
+    requestContext: RequestContext
+}
+
+export interface RequestContext {
+    remoteIp: string,
+    browserUserAgent: string,
+    countryCode: string
 }
