@@ -74,7 +74,7 @@ passwordData (object) - in [this format](https://developer.ft.com/portal/docs-me
 
 #### Return value
 
-If successful, the user will be reauthenticated and the [fresh session data](https://developer.ft.com/portal/docs-membership-platform-api-post-login) will be returned.
+If successful, the user will be reauthenticated and the [fresh session data](https://github.com/Financial-Times/secure-login-api/blob/master/swagger.yaml#L183) will be returned.
 
 ## Build
 

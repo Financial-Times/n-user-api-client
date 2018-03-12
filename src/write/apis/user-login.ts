@@ -29,8 +29,9 @@ export const userLoginApi = ({email, password, apiHost, apiKey, appName, remoteI
             } as RequestInit;
 
             const response = await fetch(url, options);
-            if (response.ok)
+            if (response.ok){
                 return resolve(response.json());
+            }
             reject(new ErrorWithData(errorMsg, {
                 url
             }));
