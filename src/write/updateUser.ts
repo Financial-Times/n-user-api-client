@@ -4,7 +4,7 @@ import {userLoginApi} from './apis/user-login';
 import {getUserBySession} from '../read/getUser';
 import {getAuthToken} from './apis/auth-service';
 import {mergeObjects} from './transforms/merge-two-objects';
-import {GraphQlUserApiResponse, UpdateUserOptions, UserObject} from '../types';
+import {GraphQlUserApiResponse, UpdateUserOptions, UserObject, UserProfileObject} from '../types';
 
 const getUserAndAuthToken = ({session, apiHost, apiClientId}): Promise<[any, any]> => {
     return Promise.all([
@@ -55,12 +55,12 @@ export const changeUserPassword = async (opts: UpdateUserOptions): Promise<any> 
         try {
             validateOptions(opts, 'passwordData');
             validateRequestContext(opts);
-            const {apiHost, apiKey, apiClientId, appName, session, userId, passwordData} = opts;
+            const {apiHost, apiKey, appName, session, userId, passwordData} = opts;
             const {remoteIp, browserUserAgent, countryCode} = opts.requestContext;
-            const [userApiResponse, authToken] = await getUserAndAuthToken({session, apiHost, apiClientId});
-            const password = await updateUserPasswordApi({userId, passwordData, authToken, apiHost, apiKey, appName: appName});
+            const userProfile = (await getUserBySession(session)).profile as UserProfileObject;
+            const password = await updateUserPasswordApi({userId, passwordData, apiHost, apiKey, appName: appName});
             resolve(await userLoginApi({
-                email: userApiResponse.profile.email,
+                email: userProfile.email,
                 password,
                 apiHost,
                 apiKey,
