@@ -78,7 +78,7 @@ const nocks = {
 	userApi: ({ statusCode = 200, userId } = {}) => {
 		let requestBody;
 		return nock('https://api.ft.com')
-			.put(`/users/${userId}/profile`, body => requestBody = body)
+			.put(`/v1/users/${userId}/profile`, body => requestBody = body)
 			.reply(statusCode, () => {
 				return new Response(requestBody)
 			});

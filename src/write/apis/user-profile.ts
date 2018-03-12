@@ -2,7 +2,7 @@ import {ErrorWithData} from "../../utils/error";
 
 export const updateUserProfileApi = ({userId, userUpdate, authToken, apiHost, apiKey, appName}) => {
     return new Promise(async (resolve, reject) => {
-        const url = `${apiHost}/users/${userId}/profile`;
+        const url = `${apiHost}/v1/users/${userId}/profile`;
         const errorMsg = 'Could not update user';
         const options = {
             timeout: 10000,
