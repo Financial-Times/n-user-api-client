@@ -1,9 +1,10 @@
-const {expect} = require('chai');
-const {getUserBySession, getUserIdAndSessionData} = require('../dist/read/getUser');
-const nocks = require('./nocks');
+import { expect } from 'chai';
+import { getUserBySession, getUserIdAndSessionData } from '../src/read/getUser';
+import { nocks } from './nocks';
 
 describe('getUser', () => {
 	const session = '123';
+	let responseType;
 
 	describe('getUserBySession', () => {
 		it('resolves with a transformed user object when successful', async () => {
@@ -13,14 +14,14 @@ describe('getUser', () => {
 		});
 
 		it('handles exception thrown within canned query', async () => {
-			nocks.graphQlUserBySession({ statusCode: 500 });
+			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			return getUserBySession(session)
 				.catch(err =>
 					expect(err.message).to.equal('Unable to retrieve user'));
 		});
 
 		it('throws if no session supplied', done => {
-			getUserBySession()
+			getUserBySession(undefined)
 				.catch(err => {
 					expect(err.message).to.equal('Session not supplied');
 					done();

@@ -1,6 +1,6 @@
-const { expect } = require('chai');
-const { isSessionStale } = require('../../dist/read/transforms/session-freshness');
-const {ErrorWithData} = require('../../dist/utils/error');
+import { expect } from 'chai';
+import { isSessionStale } from '../../src/read/transforms/session-freshness';
+import { ErrorWithData } from '../../src/utils/error';
 
 describe('isSessionStale', () => {
 	const invalidMessage = 'isSessionFresh not supplied with valid session creation timestamp';

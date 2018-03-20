@@ -11,7 +11,7 @@ export interface SimpleList extends Array<SimpleListItem> {
 
 export interface GraphQlUserApiResponse {
     subscriber: object,
-    profile: object,
+    profile: any,
     id: string
 }
 

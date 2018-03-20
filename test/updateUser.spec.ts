@@ -1,6 +1,7 @@
-const {expect} = require('chai');
-const {updateUserProfile, changeUserPassword} = require('../dist/write/updateUser');
-const nocks = require('./nocks');
+import { expect } from 'chai';
+import { updateUserProfile, changeUserPassword } from '../src/write/updateUser';
+import { nocks } from './nocks';
+import { UpdateUserOptions } from '../src/types/index';
 
 describe('updateUser', () => {
 	const baseParams = {
@@ -16,11 +17,12 @@ describe('updateUser', () => {
 			...baseParams,
 			passwordData: { newPassword: 'new-password', oldPassword: 'old-password' }
 		};
+		let responseType;
 
 		it('resolves with new session data when successful', async () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
-			nocks.userPasswordApi({userId: params.userId});
+			nocks.userPasswordApi({ userId: params.userId });
 			nocks.loginApi();
 			const sessionData = await changeUserPassword(params);
 			expect(sessionData.sessionToken).to.be.a.string;
@@ -30,7 +32,7 @@ describe('updateUser', () => {
 		it('sends new password to login service when successful', async () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
-			nocks.userPasswordApi({userId: params.userId});
+			nocks.userPasswordApi({ userId: params.userId });
 			const loginApiNock = nocks.loginApi();
 			await changeUserPassword(params);
 			expect(loginApiNock.requestBody.password).to.equal(params.passwordData.newPassword);
@@ -39,7 +41,7 @@ describe('updateUser', () => {
 		it('should send client id and response type to auth API', async () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			const authApiNock = nocks.authApi();
-			nocks.userPasswordApi({userId: params.userId});
+			nocks.userPasswordApi({ userId: params.userId });
 			nocks.loginApi();
 			await changeUserPassword(params);
 			expect(authApiNock.request.path).to.include('client_id=my-client-id');
@@ -47,9 +49,9 @@ describe('updateUser', () => {
 		});
 
 		it('doesn\'t call password service when getUserBySession fails', done => {
-			nocks.graphQlUserBySession({ statusCode: 500 });
+			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
-			const passwordApiNock = nocks.userPasswordApi({userId: params.userId});
+			const passwordApiNock = nocks.userPasswordApi({ userId: params.userId });
 			changeUserPassword(params)
 				.catch(() => {
 					expect(passwordApiNock.isDone()).to.be.false;
@@ -60,7 +62,7 @@ describe('updateUser', () => {
 		it('doesn\'t call password service when getAuthToken fails', done => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi({ statusCode: 500 });
-			const passwordApiNock = nocks.userPasswordApi({userId: params.userId});
+			const passwordApiNock = nocks.userPasswordApi({ userId: params.userId });
 			changeUserPassword(params)
 				.catch(() => {
 					expect(passwordApiNock.isDone()).to.be.false;
@@ -81,9 +83,9 @@ describe('updateUser', () => {
 		});
 
 		it('handles exception thrown within getUserBySession', done => {
-			nocks.graphQlUserBySession({ statusCode: 500 });
+			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
-			nocks.userApi({userId: params.userId});
+			nocks.userApi({ userId: params.userId });
 			changeUserPassword(params)
 				.catch(err => {
 					expect(err.message).to.equal('Unable to retrieve user');
@@ -117,7 +119,7 @@ describe('updateUser', () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
 			nocks.loginApi({ statusCode: 500 });
-			nocks.userPasswordApi({userId: params.userId});
+			nocks.userPasswordApi({ userId: params.userId });
 			changeUserPassword(params)
 				.catch(err => {
 					expect(err.message).to.equal('Could not log user in');
@@ -137,7 +139,7 @@ describe('updateUser', () => {
 		});
 
 		it('throws if no options supplied', done => {
-			changeUserPassword()
+			changeUserPassword(undefined)
 				.catch(err => {
 					expect(err.message).to.equal('Options not supplied');
 					done();
@@ -145,7 +147,7 @@ describe('updateUser', () => {
 		});
 
 		it('throws if invalid options supplied', done => {
-			changeUserPassword({apiKey: ''})
+			changeUserPassword({ apiKey: '' } as UpdateUserOptions)
 				.catch(err => {
 					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiClientId, userId, passwordData');
 					done();
@@ -162,19 +164,21 @@ describe('updateUser', () => {
 				}
 			}
 		};
+		let responseType;
 
+		
 		it('merges update with existing user record when successful', async () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
-			nocks.userApi({userId: params.userId});
+			nocks.userApi({ userId: params.userId });
 			const response = await updateUserProfile(params);
-			expect(response.body.user.firstName).to.equal('Jane');
+			expect(response.user.firstName).to.equal('Jane');
 		});
 
 		it('doesn\'t call user service when getUserBySession fails', done => {
-			nocks.graphQlUserBySession({ statusCode: 500 });
+			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
-			const userApiNock = nocks.userApi({userId: params.userId});
+			const userApiNock = nocks.userApi({ userId: params.userId });
 			updateUserProfile(params)
 				.catch(() => {
 					expect(userApiNock.isDone()).to.be.false;
@@ -185,7 +189,7 @@ describe('updateUser', () => {
 		it('doesn\'t call user service when getAuthToken fails', done => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi({ statusCode: 500 });
-			const userApiNock = nocks.userApi({userId: params.userId});
+			const userApiNock = nocks.userApi({ userId: params.userId });
 			updateUserProfile(params)
 				.catch(() => {
 					expect(userApiNock.isDone()).to.be.false;
@@ -194,9 +198,9 @@ describe('updateUser', () => {
 		});
 
 		it('handles exception thrown within getUserBySession', done => {
-			nocks.graphQlUserBySession({ statusCode: 500 });
+			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
-			nocks.userApi({userId: params.userId});
+			nocks.userApi({ userId: params.userId });
 			updateUserProfile(params)
 				.catch(err => {
 					expect(err.message).to.equal('Unable to retrieve user');
@@ -251,7 +255,7 @@ describe('updateUser', () => {
 		});
 
 		it('throws if no options supplied', done => {
-			updateUserProfile()
+			updateUserProfile(undefined)
 				.catch(err => {
 					expect(err.message).to.equal('Options not supplied');
 					done();
@@ -259,7 +263,7 @@ describe('updateUser', () => {
 		});
 
 		it('throws if invalid options supplied', done => {
-			updateUserProfile({userUpdate: ''})
+			updateUserProfile({ userUpdate: '' } as UpdateUserOptions)
 				.catch(err => {
 					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiKey, apiClientId, userId, userUpdate');
 					done();
