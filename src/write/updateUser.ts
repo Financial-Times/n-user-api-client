@@ -4,7 +4,7 @@ import {userLoginApi} from './apis/user-login';
 import {getUserBySession} from '../read/getUser';
 import {getAuthToken} from './apis/auth-service';
 import {mergeObjects} from './transforms/merge-two-objects';
-import {GraphQlUserApiResponse, UpdateUserOptions, UserObject} from '../types';
+import {GraphQlUserApiResponse, UpdateUserOptions, UserObject, UserProfileObject} from '../types';
 
 const getUserAndAuthToken = ({session, apiHost, apiClientId}): Promise<[any, any]> => {
     return Promise.all([
@@ -13,7 +13,7 @@ const getUserAndAuthToken = ({session, apiHost, apiClientId}): Promise<[any, any
     ])
 };
 
-const mergeUserUpdateWithFetchedUser = ({userUpdate, userApiResponse}: {userUpdate: UserObject, userApiResponse: GraphQlUserApiResponse}) => {
+const mergeUserUpdateWithFetchedUser = ({userUpdate, userApiResponse}: { userUpdate: UserObject, userApiResponse: GraphQlUserApiResponse }) => {
     if (!userApiResponse.profile || !userUpdate.profile)
         throw new Error('mergeUserUpdateWithFetchedUser not supplied with valid user object or update');
     return {
@@ -24,7 +24,7 @@ const mergeUserUpdateWithFetchedUser = ({userUpdate, userApiResponse}: {userUpda
 const validateOptions = (opts, dataOption) => {
     if (!opts)
         throw new Error('Options not supplied');
-    const stringOpts = ['session', 'apiHost', 'apiKey', 'apiClientId', 'userId'];
+    const stringOpts = ['session', 'apiHost', 'apiKey', 'apiClientId', 'userId', 'appName'];
     let invalidOptions = [];
     stringOpts.forEach(stringOpt => {
         if (typeof opts[stringOpt] !== 'string')
@@ -36,14 +36,39 @@ const validateOptions = (opts, dataOption) => {
         throw new Error(`Invalid option(s): ${invalidOptions.join(', ')}`);
 };
 
+
+const validateRequestContext = (opts) => {
+    if (!opts)
+        throw new Error('request context not supplied');
+    let invalidOptions = [];
+    const contextOpts = ['remoteIp', 'browserUserAgent', 'countryCode'];
+    contextOpts.forEach(stringOpt => {
+        if (typeof opts.requestContext[stringOpt] !== 'string')
+            invalidOptions.push(stringOpt);
+    });
+    if (invalidOptions.length)
+        throw new Error(`Invalid option(s): ${invalidOptions.join(', ')}`);
+};
+
 export const changeUserPassword = async (opts: UpdateUserOptions): Promise<any> => {
     return new Promise(async (resolve, reject) => {
         try {
             validateOptions(opts, 'passwordData');
-            const {session, apiHost, apiKey, apiClientId, userId, passwordData} = opts;
-            const [userApiResponse, authToken] = await getUserAndAuthToken({session, apiHost, apiClientId});
-            const password = await updateUserPasswordApi({userId, passwordData, authToken, apiHost, apiKey});
-            resolve(await userLoginApi({email: userApiResponse.profile.email, password, apiHost, apiKey}));
+            validateRequestContext(opts);
+            const {apiHost, apiKey, appName, session, userId, passwordData} = opts;
+            const {remoteIp, browserUserAgent, countryCode} = opts.requestContext;
+            const userProfile = (await getUserBySession(session)).profile as UserProfileObject;
+            const password = await updateUserPasswordApi({userId, passwordData, apiHost, apiKey, appName: appName});
+            resolve(await userLoginApi({
+                email: userProfile.email,
+                password,
+                apiHost,
+                apiKey,
+                appName,
+                remoteIp,
+                userAgent: browserUserAgent,
+                countryCode
+            }));
         } catch (err) {
             reject(err);
         }
@@ -54,7 +79,7 @@ export const updateUserProfile = async (opts: UpdateUserOptions): Promise<any> =
     return new Promise(async (resolve, reject) => {
         try {
             validateOptions(opts, 'userUpdate');
-            const {session, apiHost, apiKey, apiClientId, userId, userUpdate} = opts;
+            const {apiHost, apiKey, apiClientId, appName, session, userId, userUpdate} = opts;
             const [userApiResponse, authToken] = await getUserAndAuthToken({session, apiHost, apiClientId});
             const updateMergedWithFetchedUser = mergeUserUpdateWithFetchedUser({userUpdate, userApiResponse});
             resolve(await updateUserProfileApi({
@@ -62,7 +87,8 @@ export const updateUserProfile = async (opts: UpdateUserOptions): Promise<any> =
                 userUpdate: updateMergedWithFetchedUser,
                 authToken,
                 apiHost,
-                apiKey
+                apiKey,
+                appName
             }));
         } catch (err) {
             reject(err);

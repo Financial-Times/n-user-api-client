@@ -1,4 +1,7 @@
 {
+  "success": true,
+  "status": "SUCCESS",
   "sessionToken": "zwhe7_PFm0Yu05NTPPTeXB9EzwAAAVbbrnOqww.MEYCIQCazDcQkQbU6oga1ipnZPiqXfFYWgdB-CK8ghCK92fKsgIhANhec9_Y3Q8U38rwcQ7qGh_Rl6ExiPtuR-YLvyDVCf5Q",
-"secureSessionToken": "zwhe7_PFm0Yu05NTPPTeXB9EzwAAAVbbrnOpww.MEUCICEHj0hCdoLQ3CzBqMB_gTAOVNTDWF8odRly8YU4_jDGAiEA8SQrqDHJfgpSs3p7OZ7oTMjUjoWfvsr9NSn4k44AE7Y"
+  "secureSessionToken": "zwhe7_PFm0Yu05NTPPTeXB9EzwAAAVbbrnOpww.MEUCICEHj0hCdoLQ3CzBqMB_gTAOVNTDWF8odRly8YU4_jDGAiEA8SQrqDHJfgpSs3p7OZ7oTMjUjoWfvsr9NSn4k44AE7Y",
+  "userId": "A_USER_ID_THAT_SECRET_SQUIRREL_LIKES"
 }

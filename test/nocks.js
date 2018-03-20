@@ -78,7 +78,7 @@ const nocks = {
 	userApi: ({ statusCode = 200, userId } = {}) => {
 		let requestBody;
 		return nock('https://api.ft.com')
-			.put(`/users/${userId}/profile`, body => requestBody = body)
+			.put(`/v1/users/${userId}/profile`, body => requestBody = body)
 			.reply(statusCode, () => {
 				return new Response(requestBody)
 			});
@@ -87,14 +87,14 @@ const nocks = {
 	userPasswordApi: ({ statusCode = 200, userId } = {}) => {
 		const response = statusCode === 200 ? {} : responses.genericError;
 		return nock('https://api.ft.com')
-			.post(`/users/${userId}/credentials/change-password`)
+			.post(`/v1/users/${userId}/credentials/change-password`)
 			.reply(statusCode, response);
 	},
 
 	loginApi: ({ statusCode = 200 } = {}) => {
 		const response = statusCode === 200 ? responses.loginSuccess : responses.genericError;
 		const loginApiNock = nock('https://api.ft.com')
-			.post('/login', body => loginApiNock.requestBody = body)
+			.post('/v1/reauthenticate', body => loginApiNock.requestBody = body)
 			.reply(statusCode, response);
 		return loginApiNock;
 	}
