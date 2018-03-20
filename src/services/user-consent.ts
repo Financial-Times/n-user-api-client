@@ -1,3 +1,4 @@
+import { mergeDeepRight } from 'ramda';
 import { PlatformAPI } from '../wrappers/platform-api';
 import { APIMode } from '../wrappers/helpers/api-mode';
 import { ConsentAPI } from '../types/consent-api';
@@ -86,22 +87,18 @@ export class UserConsent extends PlatformAPI {
 		channel: string,
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
-		let { version, data: recordToUpdate } = await this.getConsent(
+		const { version, data: existingRecord } = await this.getConsent(
 			category,
 			channel
 		);
 
-		for (const [category, channelConsents] of Object.entries(consents)) {
-			for (const [channel, consent] of Object.entries(channelConsents)) {
-				recordToUpdate[category][channel] = consent;
-			}
-		}
+		const updatedRecord = mergeDeepRight(existingRecord, consents);
 
 		const updatedConsents = (await this.post(
 			`/${this.scope}/${category}/${channel}`,
 			'Could not update consent',
 			{
-				body: JSON.stringify({ version, data: recordToUpdate })
+				body: JSON.stringify({ version, data: updatedRecord })
 			}
 		)) as ConsentAPI.ConsentRecord;
 
