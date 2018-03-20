@@ -78,4 +78,14 @@ export class PlatformAPI {
 		options.method = 'POST';
 		return await this._fetch(path, options, errorMsg);
 	}
+
+	public async patch(
+		path: string,
+		errorMsg: string,
+		options?: RequestInit
+	): Promise<any> {
+		options = options ? mergeDeepRight(this.options, options) : this.options;
+		options.method = 'PATCH';
+		return await this._fetch(path, options, errorMsg);
+	}
 }

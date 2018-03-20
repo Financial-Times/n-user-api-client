@@ -1,36 +1,6 @@
 import { PlatformAPI } from '../wrappers/platform-api';
 import { APIMode } from '../wrappers/helpers/api-mode';
-
-export namespace ConsentAPI {
-	export interface ConsentChannel {
-		version?: number;
-		status: boolean;
-		lbi: boolean;
-		fow: string;
-		source: string;
-		lastModified?: string;
-	}
-
-	export interface ConsentCategory {
-		[name: string]: ConsentChannel;
-	}
-
-	export interface ConsentCategories {
-		[name: string]: Array<ConsentCategory>;
-	}
-
-	export interface ConsentUnit {
-		version?: number;
-		lastModified?: string;
-		data: ConsentChannel;
-	}
-
-	export interface ConsentRecord {
-		version?: number;
-		lastModified?: string;
-		data: ConsentCategories;
-	}
-}
+import { ConsentAPI } from '../types/consent-api';
 
 // returns consents normalised to the Consent API schema
 export class UserConsent extends PlatformAPI {
@@ -85,7 +55,7 @@ export class UserConsent extends PlatformAPI {
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
 		const createdConsents = (await this.post(
-			`/${this.scope}/${category}/${channel}`,
+			`/${this.scope}`,
 			'Could not create consents',
 			{
 				body: JSON.stringify({ data: consents })
@@ -100,32 +70,41 @@ export class UserConsent extends PlatformAPI {
 		channel: string,
 		consent: ConsentAPI.ConsentChannel
 	): Promise<ConsentAPI.ConsentUnit> {
-		const { version } = await this.getConsent(category, channel);
-		const createdConsent = (await this.post(
+		const updatedConsent = (await this.patch(
 			`/${this.scope}/${category}/${channel}`,
 			'Could not update consent',
-			{	
-				body: JSON.stringify({ version, data: consent })
+			{
+				body: JSON.stringify({ data: consent })
 			}
 		)) as ConsentAPI.ConsentUnit;
 
-		return createdConsent;
+		return updatedConsent;
 	}
 
 	public async updateConsents(
 		category: string,
 		channel: string,
-		consents: ConsentAPI.ConsentChannel
-	): Promise<ConsentAPI.ConsentUnit> {
-		const { version } = await this.getConsent(category, channel);
-		const createdConsents = (await this.post(
+		consents: ConsentAPI.ConsentCategories
+	): Promise<ConsentAPI.ConsentRecord> {
+		let { version, data: recordToUpdate } = await this.getConsent(
+			category,
+			channel
+		);
+
+		for (const [category, channelConsents] of Object.entries(consents)) {
+			for (const [channel, consent] of Object.entries(channelConsents)) {
+				recordToUpdate[category][channel] = consent;
+			}
+		}
+
+		const updatedConsents = (await this.post(
 			`/${this.scope}/${category}/${channel}`,
 			'Could not update consent',
-			{	
-				body: JSON.stringify({ version, data: consents })
+			{
+				body: JSON.stringify({ version, data: recordToUpdate })
 			}
-		)) as ConsentAPI.ConsentUnit;
+		)) as ConsentAPI.ConsentRecord;
 
-		return createdConsents;
+		return updatedConsents;
 	}
 }
