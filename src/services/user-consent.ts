@@ -1,5 +1,4 @@
 import { mergeDeepRight } from 'ramda';
-import * as Joi from 'joi';
 
 import { PlatformAPI } from '../wrappers/platform-api';
 import { APIMode } from '../wrappers/helpers/api-mode';
@@ -31,7 +30,7 @@ export class UserConsent extends PlatformAPI {
 		consent: ConsentAPI.ConsentChannel
 	): Promise<ConsentAPI.ConsentChannel> {
 		const decoratedConsent = this.decorateConsent(consent);
-		return await schema.validate(decoratedConsent, schema.consent);
+		return await schema.validateObject(decoratedConsent, schema.consent);
 	}
 
 	private async validateConsentRecordPayload(
@@ -42,14 +41,15 @@ export class UserConsent extends PlatformAPI {
 				consents[category][channel] = this.decorateConsent(consent);
 			}
 		}
-		return await schema.validate(consents, schema.record);
+		return await schema.validateObject(consents, schema.record);
 	}
 
 	public async getConsent(
 		category: string,
 		channel: string
 	): Promise<ConsentAPI.ConsentUnit> {
-		const consent = (await this.get(
+		const consent = (await this.request(
+			'GET',
 			`/${this.scope}/${category}/${channel}`,
 			'Could not retrieve consent'
 		)) as ConsentAPI.ConsentUnit;
@@ -58,7 +58,8 @@ export class UserConsent extends PlatformAPI {
 	}
 
 	public async getConsentRecord(): Promise<ConsentAPI.ConsentRecord> {
-		const consents = (await this.get(
+		const consents = (await this.request(
+			'GET',
 			`/${this.scope}`,
 			'Could not retrieve consent record'
 		)) as ConsentAPI.ConsentRecord;
@@ -73,7 +74,8 @@ export class UserConsent extends PlatformAPI {
 	): Promise<ConsentAPI.ConsentUnit> {
 		const payload = await this.validateConsentPayload(consent);
 
-		const createdConsent = (await this.post(
+		const createdConsent = (await this.request(
+			'POST',
 			`/${this.scope}/${category}/${channel}`,
 			'Could not create consent',
 			{
@@ -89,7 +91,8 @@ export class UserConsent extends PlatformAPI {
 	): Promise<ConsentAPI.ConsentRecord> {
 		const payload = await this.validateConsentRecordPayload(consents);
 
-		const createdConsents = (await this.post(
+		const createdConsents = (await this.request(
+			'POST',
 			`/${this.scope}`,
 			'Could not create consents',
 			{
@@ -107,7 +110,8 @@ export class UserConsent extends PlatformAPI {
 	): Promise<ConsentAPI.ConsentUnit> {
 		const payload = await this.validateConsentPayload(consent);
 
-		const updatedConsent = (await this.patch(
+		const updatedConsent = (await this.request(
+			'PATCH',
 			`/${this.scope}/${category}/${channel}`,
 			'Could not update consent',
 			{
@@ -126,7 +130,8 @@ export class UserConsent extends PlatformAPI {
 
 		const updatedRecord = mergeDeepRight(existingRecord, consents);
 
-		const updatedConsents = (await this.put(
+		const updatedConsents = (await this.request(
+			'PUT',
 			`/${this.scope}`,
 			'Could not update consent',
 			{

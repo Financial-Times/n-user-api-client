@@ -1,25 +1,25 @@
-import * as Joi from 'joi';
+import { ObjectSchema, object, bool, string, validate } from 'joi';
 import { ErrorWithData } from '../../utils/error';
 
 const validationOptions = {
 	abortEarly: true,
 	stripUnknown: true,
-    presence: 'required'
+	presence: 'required'
 };
 
-export const consent: Joi.ObjectSchema = Joi.object().keys({
-	status: Joi.bool(),
-	lbi: Joi.bool().default(false),
-	fow: Joi.string().min(3),
-	source: Joi.string().min(3)
+export const consent: ObjectSchema = object().keys({
+	status: bool(),
+	lbi: bool().default(false),
+	fow: string().min(3),
+	source: string().min(3)
 });
 
-export const category: Joi.ObjectSchema = Joi.object().pattern(/\w+/, consent);
+export const category: ObjectSchema = object().pattern(/\w+/, consent);
 
-export const record: Joi.ObjectSchema = Joi.object().pattern(/\w+/, category);
+export const record: ObjectSchema = object().pattern(/\w+/, category);
 
-export function validate(object: any, schema: Joi.schema): any {
-	const { error, value } = Joi.validate(object, schema, validationOptions);
+export function validateObject(object: any, schema: ObjectSchema): any {
+	const { error, value } = validate(object, schema, validationOptions);
 
 	if (error) {
 		throw new ErrorWithData('Invalid request body', {

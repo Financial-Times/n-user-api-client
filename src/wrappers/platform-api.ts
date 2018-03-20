@@ -64,43 +64,14 @@ export class PlatformAPI {
 		}
 	}
 
-	public async get(
+	public async request(
+		method: string,
 		path: string,
 		errorMsg: string,
 		options?: RequestInit
 	): Promise<any> {
 		options = options ? mergeDeepRight(this.options, options) : this.options;
-		options.method = 'GET';
-		return await this._fetch(path, options, errorMsg);
-	}
-
-	public async put(
-		path: string,
-		errorMsg: string,
-		options?: RequestInit
-	): Promise<any> {
-		options = options ? mergeDeepRight(this.options, options) : this.options;
-		options.method = 'PUT';
-		return await this._fetch(path, options, errorMsg);
-	}
-
-	public async post(
-		path: string,
-		errorMsg: string,
-		options?: RequestInit
-	): Promise<any> {
-		options = options ? mergeDeepRight(this.options, options) : this.options;
-		options.method = 'POST';
-		return await this._fetch(path, options, errorMsg);
-	}
-
-	public async patch(
-		path: string,
-		errorMsg: string,
-		options?: RequestInit
-	): Promise<any> {
-		options = options ? mergeDeepRight(this.options, options) : this.options;
-		options.method = 'PATCH';
+		options.method = method;
 		return await this._fetch(path, options, errorMsg);
 	}
 }
