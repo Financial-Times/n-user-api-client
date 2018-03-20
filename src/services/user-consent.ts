@@ -52,7 +52,8 @@ export class UserConsent extends PlatformAPI {
 			'Could not retrieve consent'
 		)) as ConsentAPI.ConsentUnit;
 
-		return await (consent as any).json();
+		const { data } = await (consent as any).json();
+		return data;
 	}
 
 	public async getConsentRecord(): Promise<ConsentAPI.ConsentRecord> {
@@ -62,7 +63,8 @@ export class UserConsent extends PlatformAPI {
 			'Could not retrieve consent record'
 		)) as ConsentAPI.ConsentRecord;
 
-		return await (consents as any).json();
+		const { data } = await (consents as any).json();
+		return data;
 	}
 
 	public async createConsent(
@@ -81,7 +83,8 @@ export class UserConsent extends PlatformAPI {
 			}
 		)) as ConsentAPI.ConsentUnit;
 
-		return await (createdConsent as any).json();
+		const { data } = await (createdConsent as any).json();
+		return data;
 	}
 
 	public async createConsentRecord(
@@ -98,7 +101,8 @@ export class UserConsent extends PlatformAPI {
 			}
 		)) as ConsentAPI.ConsentRecord;
 
-		return await (createdConsents as any).json();
+		const { data } = await (createdConsents as any).json();
+		return data;
 	}
 
 	public async updateConsent(
@@ -117,7 +121,8 @@ export class UserConsent extends PlatformAPI {
 			}
 		)) as ConsentAPI.ConsentUnit;
 
-		return await (updatedConsent as any).json();
+		const { data } = await (updatedConsent as any).json();
+		return data;
 	}
 
 	public async updateConsentRecord(
@@ -137,6 +142,7 @@ export class UserConsent extends PlatformAPI {
 			}
 		)) as ConsentAPI.ConsentRecord;
 
-		return await (updatedConsents as any).json();
+		const { data } = await (updatedConsents as any).json();
+		return data;
 	}
 }

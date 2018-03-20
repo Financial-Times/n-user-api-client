@@ -26,6 +26,7 @@ const test = {
 
 const consentRecord = consentRecordResponse.data;
 const consentUnit = consentRecordResponse.data[test.category][test.channel];
+const consentResponse = { data: consentUnit };
 
 function nockConsentAPI(
 	path: string,
@@ -132,7 +133,7 @@ describe('UserConsent - consent API wrapper', () => {
 				`/${test.category}/${test.channel}`,
 				'get',
 				200,
-				consentUnit
+				consentResponse
 			);
 			const response = await api.getConsent(test.category, test.channel);
 			expect(response).to.deep.equal(consentUnit);
@@ -152,7 +153,7 @@ describe('UserConsent - consent API wrapper', () => {
 		it('should get the consent record for a user', async () => {
 			nockConsentAPI('', 'get', 200, consentRecordResponse);
 			const response = await api.getConsentRecord();
-			expect(response).to.deep.equal(consentRecordResponse);
+			expect(response).to.deep.equal(consentRecord);
 		});
 
 		it('should throw a decorated error', async () => {
@@ -171,7 +172,7 @@ describe('UserConsent - consent API wrapper', () => {
 				`/${test.category}/${test.channel}`,
 				'post',
 				200,
-				consentUnit
+				consentResponse
 			);
 			const response = await api.createConsent(
 				test.category,
@@ -194,14 +195,14 @@ describe('UserConsent - consent API wrapper', () => {
 	context('createConsentRecord', () => {
 		it('should create a consent record for a user', async () => {
 			nockConsentAPI('', 'post', 200, consentRecordResponse);
-			const response = await api.createConsentRecord(consentRecordResponse.data);
-			expect(response).to.deep.equal(consentRecordResponse);
+			const response = await api.createConsentRecord(consentRecord);
+			expect(response).to.deep.equal(consentRecord);
 		});
 
 		it('should throw a decorated error', async () => {
 			nockConsentAPI('', 'post', 400);
 			try {
-				await api.createConsentRecord(consentRecordResponse.data);
+				await api.createConsentRecord(consentRecord);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
 			}
@@ -214,7 +215,7 @@ describe('UserConsent - consent API wrapper', () => {
 				`/${test.category}/${test.channel}`,
 				'patch',
 				200,
-				consentUnit
+				consentResponse
 			);
 			const response = await api.updateConsent(
 				test.category,
@@ -254,7 +255,7 @@ describe('UserConsent - consent API wrapper', () => {
 			nockConsentAPI('', 'get', 200, consentRecordResponse);
 			nockConsentAPI('', 'put', 200, updatedConsentRecord);
 			const response = await api.updateConsentRecord(payload);
-			expect(response).to.deep.equal(updatedConsentRecord);
+			expect(response).to.deep.equal(updatedConsentRecord.data);
 		});
 
 		it('should throw a decorated error', async () => {

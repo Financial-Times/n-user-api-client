@@ -21,7 +21,6 @@ export function validateObject(object: any, schema: ObjectSchema): any {
 	const { error, value } = validate(object, schema, validationOptions);
 
 	if (error) {
-		console.log(error.details);
 		throw new ErrorWithData('Invalid request body', {
 			api: 'CONSENT_API',
 			action: 'REQUEST_BODY_VALIDATION',
