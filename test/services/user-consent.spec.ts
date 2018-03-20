@@ -37,7 +37,7 @@ function nockConsentAPI(
 		.reply(statusCode, response);
 }
 
-describe.only('UserConsent - consent API wrapper', () => {
+describe('UserConsent - consent API wrapper', () => {
 	let api;
 
 	beforeEach(() => {
@@ -56,6 +56,23 @@ describe.only('UserConsent - consent API wrapper', () => {
 	it('defaults scope to FTPINK', () => {
 		api = new UserConsent(test.uuid, test.source, APIMode.Mock);
 		expect(api.scope).to.equal('FTPINK');
+	});
+
+	context('validation', () => {
+		it('gets a consent unit for a user', async () => {
+			nockConsentAPI(`/${test.category}/${test.channel}`, 'get', 200, consentUnit);
+			const response = await api.getConsent(test.category, test.channel);
+			expect(response).to.deep.equal(consentUnit);
+		});
+
+		it('errors with data', async () => {
+			nockConsentAPI(`/${test.category}/${test.channel}`, 'get', 400);
+			try {
+				await api.getConsent(test.category, test.channel);
+			} catch (error) {
+				expect(error).to.be.instanceof(ErrorWithData);
+			}
+		});
 	});
 
 	context('getConsent', () => {

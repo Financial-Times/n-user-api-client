@@ -42,7 +42,6 @@ export class UserConsent extends PlatformAPI {
 				consents[category][channel] = this.decorateConsent(consent);
 			}
 		}
-
 		return await schema.validate(consents, schema.record);
 	}
 
