@@ -18,7 +18,7 @@ const nockConsentAPI = (path, statusCode, response) =>
 		.post(`/users/${testUUID}${path}`)
 		.reply(statusCode, response);
 
-describe.only('UserConsent - consent API wrapper', () => {
+describe('UserConsent - consent API wrapper', () => {
 	let api;
 
 	beforeEach(() => {
