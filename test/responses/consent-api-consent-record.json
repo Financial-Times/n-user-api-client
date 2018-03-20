@@ -1,0 +1,54 @@
+{
+  "href": "string",
+  "version": 0,
+  "createDate": "2018-03-20T15:22:48.034Z",
+  "lastModified": "2018-03-20T15:22:48.034Z",
+  "data": {
+    "marketing": {
+      "byEmail": {
+        "status": true,
+        "lbi": true,
+        "fow": "string",
+        "source": "string",
+        "lastModified": "2018-03-20T15:22:48.034Z"
+      },
+      "byPost": {
+        "status": true,
+        "lbi": true,
+        "fow": "string",
+        "source": "string",
+        "lastModified": "2018-03-20T15:22:48.034Z"
+      },
+      "byPhoneCall": {
+        "status": true,
+        "lbi": true,
+        "fow": "string",
+        "source": "string",
+        "lastModified": "2018-03-20T15:22:48.034Z"
+      }
+    },
+    "enhanced": {
+      "byEmail": {
+        "status": true,
+        "lbi": true,
+        "fow": "string",
+        "source": "string",
+        "lastModified": "2018-03-20T15:22:48.034Z"
+      },
+      "byPost": {
+        "status": true,
+        "lbi": true,
+        "fow": "string",
+        "source": "string",
+        "lastModified": "2018-03-20T15:22:48.034Z"
+      },
+      "byPhoneCall": {
+        "status": true,
+        "lbi": true,
+        "fow": "string",
+        "source": "string",
+        "lastModified": "2018-03-20T15:22:48.034Z"
+      }
+    }
+  }
+}
