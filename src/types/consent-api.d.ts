@@ -13,7 +13,7 @@ export namespace ConsentAPI {
 	}
 
 	export interface ConsentCategories {
-		[name: string]: Array<ConsentCategory>;
+		[name: string]: ConsentCategory;
 	}
 
 	export interface ConsentUnit {

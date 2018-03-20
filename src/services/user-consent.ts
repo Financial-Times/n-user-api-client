@@ -1,16 +1,49 @@
 import { mergeDeepRight } from 'ramda';
+import * as Joi from 'joi';
+
 import { PlatformAPI } from '../wrappers/platform-api';
 import { APIMode } from '../wrappers/helpers/api-mode';
 import { ConsentAPI } from '../types/consent-api';
 
-// returns consents normalised to the Consent API schema
+import * as schema from './validation/consent-api';
+
 export class UserConsent extends PlatformAPI {
 	constructor(
 		uuid: string,
+		private source: string,
 		mode: APIMode = APIMode.Production,
 		private scope: string = 'FTPINK'
 	) {
 		super(`/users/${uuid}`, mode);
+	}
+
+	private decorateConsent(
+		consent: ConsentAPI.ConsentChannel
+	): ConsentAPI.ConsentChannel {
+		consent.source = consent.source || this.source;
+		consent.status = consent.status !== undefined
+			? consent.status
+			: consent.lbi || false;
+		return consent;
+	}
+
+	private async validateConsentPayload(
+		consent: ConsentAPI.ConsentChannel
+	): Promise<ConsentAPI.ConsentChannel> {
+		const decoratedConsent = this.decorateConsent(consent);
+		return await schema.validate(decoratedConsent, schema.consent);
+	}
+
+	private async validateConsentRecordPayload(
+		consents: ConsentAPI.ConsentCategories
+	): Promise<ConsentAPI.ConsentCategories> {
+		for (let [category, value] of Object.entries(consents)) {
+			for (let [channel, consent] of Object.entries(value)) {
+				consents[category][channel] = this.decorateConsent(consent);
+			}
+		}
+
+		return await schema.validate(consents, schema.record);
 	}
 
 	public async getConsent(
@@ -22,16 +55,16 @@ export class UserConsent extends PlatformAPI {
 			'Could not retrieve consent'
 		)) as ConsentAPI.ConsentUnit;
 
-		return consent;
+		return await (consent as any).json();
 	}
 
-	public async getConsents(): Promise<ConsentAPI.ConsentRecord> {
+	public async getConsentRecord(): Promise<ConsentAPI.ConsentRecord> {
 		const consents = (await this.get(
 			`/${this.scope}`,
 			'Could not retrieve consent record'
 		)) as ConsentAPI.ConsentRecord;
 
-		return consents;
+		return await (consents as any).json();
 	}
 
 	public async createConsent(
@@ -39,31 +72,33 @@ export class UserConsent extends PlatformAPI {
 		channel: string,
 		consent: ConsentAPI.ConsentChannel
 	): Promise<ConsentAPI.ConsentUnit> {
+		const payload = await this.validateConsentPayload(consent);
+
 		const createdConsent = (await this.post(
 			`/${this.scope}/${category}/${channel}`,
 			'Could not create consent',
 			{
-				body: JSON.stringify({ data: consent })
+				body: JSON.stringify({ data: payload })
 			}
 		)) as ConsentAPI.ConsentUnit;
 
-		return createdConsent;
+		return await (createdConsent as any).json();
 	}
 
-	public async createConsents(
-		category: string,
-		channel: string,
+	public async createConsentRecord(
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
+		const payload = await this.validateConsentRecordPayload(consents);
+
 		const createdConsents = (await this.post(
 			`/${this.scope}`,
 			'Could not create consents',
 			{
-				body: JSON.stringify({ data: consents })
+				body: JSON.stringify({ data: payload })
 			}
 		)) as ConsentAPI.ConsentRecord;
 
-		return createdConsents;
+		return await (createdConsents as any).json();
 	}
 
 	public async updateConsent(
@@ -71,37 +106,35 @@ export class UserConsent extends PlatformAPI {
 		channel: string,
 		consent: ConsentAPI.ConsentChannel
 	): Promise<ConsentAPI.ConsentUnit> {
+		const payload = await this.validateConsentPayload(consent);
+
 		const updatedConsent = (await this.patch(
 			`/${this.scope}/${category}/${channel}`,
 			'Could not update consent',
 			{
-				body: JSON.stringify({ data: consent })
+				body: JSON.stringify({ data: payload })
 			}
 		)) as ConsentAPI.ConsentUnit;
 
-		return updatedConsent;
+		return await (updatedConsent as any).json();
 	}
 
-	public async updateConsents(
-		category: string,
-		channel: string,
+	public async updateConsentRecord(
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
-		const { version, data: existingRecord } = await this.getConsent(
-			category,
-			channel
-		);
+		const payload = await this.validateConsentRecordPayload(consents);
+		const { version, data: existingRecord } = await this.getConsentRecord();
 
 		const updatedRecord = mergeDeepRight(existingRecord, consents);
 
-		const updatedConsents = (await this.post(
-			`/${this.scope}/${category}/${channel}`,
+		const updatedConsents = (await this.put(
+			`/${this.scope}`,
 			'Could not update consent',
 			{
 				body: JSON.stringify({ version, data: updatedRecord })
 			}
 		)) as ConsentAPI.ConsentRecord;
 
-		return updatedConsents;
+		return await (updatedConsents as any).json();
 	}
 }

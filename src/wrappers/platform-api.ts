@@ -50,7 +50,11 @@ export class PlatformAPI {
 		errorMsg: string
 	): Promise<any> {
 		try {
-			return await fetch(`${this.url}${path}`, options);
+			const response = await fetch(`${this.url}${path}`, options);
+			if(!response.ok) {
+				throw new Error(`API responded with ${response.status}`);
+			}
+			return response;
 		} catch (error) {
 			throw new ErrorWithData(errorMsg, {
 				api: 'MEMBERSHIP_PLATFORM',

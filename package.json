@@ -41,6 +41,7 @@
     "@financial-times/n-memb-gql-client": "^2.1.0",
     "@financial-times/n-ui": "^8.4.23",
     "isomorphic-fetch": "^2.2.1",
+    "joi": "^13.1.2",
     "jshint": "^2.9.5",
     "querystring": "^0.2.0",
     "ramda": "^0.25.0",
