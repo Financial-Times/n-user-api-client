@@ -20,28 +20,26 @@ export class UserConsent extends PlatformAPI {
 		consent: ConsentAPI.ConsentChannel
 	): ConsentAPI.ConsentChannel {
 		consent.source = consent.source || this.source;
-		consent.status = consent.status !== undefined
-			? consent.status
-			: consent.lbi || false;
 		return consent;
 	}
 
 	private async validateConsentPayload(
 		consent: ConsentAPI.ConsentChannel
 	): Promise<ConsentAPI.ConsentChannel> {
-		const decoratedConsent = this.decorateConsent(consent);
-		return await schema.validateObject(decoratedConsent, schema.consent);
+		const validConsent = await schema.validateObject(consent, schema.consent);
+		return this.decorateConsent(validConsent);
 	}
 
 	private async validateConsentRecordPayload(
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentCategories> {
-		for (let [category, value] of Object.entries(consents)) {
+		let validConsents = await schema.validateObject(consents, schema.record);
+		for (let [category, value] of Object.entries(validConsents)) {
 			for (let [channel, consent] of Object.entries(value)) {
-				consents[category][channel] = this.decorateConsent(consent);
+				validConsents[category][channel] = this.decorateConsent(consent);
 			}
 		}
-		return await schema.validateObject(consents, schema.record);
+		return validConsents;
 	}
 
 	public async getConsent(
