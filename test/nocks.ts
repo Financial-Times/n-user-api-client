@@ -76,7 +76,7 @@ export const nocks = {
 			.reply(statusCode, response);
 	},
 
-	authApi: ({ statusCode = 302, expiredSession = false } = {} as any): nock.Scope => {
+	authApi: ({ statusCode = 302, expiredSession = false } = {} as any): any => {
 		const result = expiredSession
 			? '#error=invalid_scope&error_description=Cannot%20acquire%20valid%20scope.'
 			: 'access_token=a1b2c3';
@@ -105,7 +105,7 @@ export const nocks = {
 			.reply(statusCode, response);
 	},
 
-	loginApi: ({ statusCode = 200 } = {} as any): nock.Scope => {
+	loginApi: ({ statusCode = 200 } = {} as any): any => {
 		let requestBody;
 		const response =
 			statusCode === 200 ? responses.loginSuccess : responses.genericError;
