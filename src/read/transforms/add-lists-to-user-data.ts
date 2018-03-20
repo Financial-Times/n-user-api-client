@@ -13,22 +13,32 @@ const selectValueInList = (list: SimpleList, userValue: string): SimpleList => {
 
 export const addListsToUserData = userData => {
 	const demographics = filterDemographicsLists();
+	const positionCode =
+		userData.profile.demographics.position &&
+		userData.profile.demographics.position.code;
+	const positions = positionCode
+		? selectValueInList(demographics.positions, positionCode)
+		: demographics.positions;
+	const industryCode =
+		userData.profile.demographics.industry &&
+		userData.profile.demographics.industry.code;
+	const industries = industryCode
+		? selectValueInList(demographics.industries, industryCode)
+		: demographics.industries;
+	const responsibilityCode =
+		userData.profile.demographics.responsibility &&
+		userData.profile.demographics.responsibility.code;
+	const responsibilities = responsibilityCode
+		? selectValueInList(demographics.responsibilities, responsibilityCode)
+		: demographics.responsibilities;
+
 	return R.mergeDeepWith((a, b) => (b ? b : a), userData, {
 		profile: {
 			titles: selectValueInList(titles, userData.profile.title),
 			demographics: {
-				positions: selectValueInList(
-					demographics.positions,
-					userData.profile.demographics.position.code
-				),
-				industries: selectValueInList(
-					demographics.industries,
-					userData.profile.demographics.industry.code
-				),
-				responsibilities: selectValueInList(
-					demographics.responsibilities,
-					userData.profile.demographics.responsibility.code
-				)
+				positions,
+				industries,
+				responsibilities
 			}
 		}
 	});

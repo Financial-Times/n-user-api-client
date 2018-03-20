@@ -10,7 +10,7 @@ describe('Transform My Account data for display', () => {
 		userData = userName(apiResponse);
 	});
 
-	it('retains existing fields under the `profile` block', () => {
+	it('retains existing fields under the \'profile\' block', () => {
 		const transformed = addListsToUserData(userData);
 		Object.keys(userData.profile).forEach(key => {
 			if (key !== 'demographics')
@@ -77,5 +77,40 @@ describe('Transform My Account data for display', () => {
 					userData.profile.demographics.responsibility.code
 			).selected
 		).to.be.true;
+	});
+
+	it('returns a list of positions with none selected if the user has no stored value for position', () => {
+		userData.profile.demographics.position = null;
+		const transformed = addListsToUserData(userData);
+		expect(transformed.profile.demographics.positions.length).to.equal(16);
+		expect(
+			transformed.profile.demographics.positions.find(
+				position => position.selected
+			)
+		).to.be.undefined;
+	});
+
+	it('returns a list of industries with none selected if the user has no stored value for industry', () => {
+		userData.profile.demographics.industry = null;
+		const transformed = addListsToUserData(userData);
+		expect(transformed.profile.demographics.industries.length).to.equal(26);
+		expect(
+			transformed.profile.demographics.industries.find(
+				industry => industry.selected
+			)
+		).to.be.undefined;
+	});
+
+	it('returns a list of responsibilities with none selected if the user has no stored value for responsibility', () => {
+		userData.profile.demographics.responsibility = null;
+		const transformed = addListsToUserData(userData);
+		expect(transformed.profile.demographics.responsibilities.length).to.equal(
+			21
+		);
+		expect(
+			transformed.profile.demographics.responsibilities.find(
+				responsibility => responsibility.selected
+			)
+		).to.be.undefined;
 	});
 });
