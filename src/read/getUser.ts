@@ -9,7 +9,9 @@ import { getSessionData } from './apis/session-service';
 
 const handleGraphQlError = (res: any, defaultErrorMsg: string, data?: any) => {
 	let errorMsg = defaultErrorMsg;
-	if (res && !res._ok && res.errors.length) errorMsg = res.errors[0].message;
+	if (res && !res._ok && res.errors.length) {
+		errorMsg = res.errors[0].message;
+	}
 	if (data.graphQlQuery)
 		metrics.count(`graphQl.${data.graphQlQuery}.failure`, 1);
 	const error = new ErrorWithData(errorMsg, {
@@ -25,7 +27,9 @@ const validateStringOptions = opts => {
 	const stringOpts = ['session', 'apiHost', 'apiKey'];
 	let invalidOptions = [];
 	stringOpts.forEach(stringOpt => {
-		if (typeof opts[stringOpt] !== 'string') invalidOptions.push(stringOpt);
+		if (typeof opts[stringOpt] !== 'string') {
+			invalidOptions.push(stringOpt);
+		}
 	});
 	if (invalidOptions.length)
 		throw new Error(`Invalid option(s): ${invalidOptions.join(', ')}`);
