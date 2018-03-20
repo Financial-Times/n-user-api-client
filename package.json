@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Financial-Times/n-user-api-client#readme",
   "devDependencies": {
-    "@financial-times/n-gage": "^1.19.9",
+    "@financial-times/n-gage": "^1.19.12",
     "@types/node": "^9.4.7",
     "@types/ramda": "^0.25.20",
     "chai": "^4.1.2",
@@ -36,7 +36,8 @@
   "dependencies": {
     "@financial-times/n-mask-logger": "^2.1.0",
     "@financial-times/n-memb-gql-client": "^2.1.0",
-    "@financial-times/n-ui": "^8.4.20",
+    "@financial-times/n-ui": "^8.4.23",
+    "isomorphic-fetch": "^2.2.1",
     "jshint": "^2.9.5",
     "querystring": "^0.2.0",
     "ramda": "^0.25.0",
