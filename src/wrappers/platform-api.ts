@@ -25,12 +25,23 @@ export class PlatformAPI {
 		this.url = `${this.apiHost}${this.commonPath}`;
 	}
 
+	private static guardEnvironmentVariable(name: string) {
+		if (process.env[name]) {
+			return process.env[name];
+		}
+		throw new ErrorWithData('Missing environment variable', {
+			api: 'MEMBERSHIP_PLATFORM',
+			environment: process.env.NODE_ENV,
+			variable: name
+		});
+	}
+
 	private get apiHost(): string {
-		return process.env[`MEMBERSHIP_API_HOST_${this.mode}`];
+		return PlatformAPI.guardEnvironmentVariable(`MEMBERSHIP_API_HOST_${this.mode}`);
 	}
 
 	private get apiKey(): string {
-		return process.env[`MEMBERSHIP_API_KEY_${this.mode}`];
+		return PlatformAPI.guardEnvironmentVariable(`MEMBERSHIP_API_KEY_${this.mode}`);
 	}
 
 	protected async _fetch(
