@@ -4,7 +4,7 @@ import { PlatformAPI } from '../wrappers/platform-api';
 import { APIMode } from '../wrappers/helpers/api-mode';
 import { ConsentAPI } from '../types/consent-api';
 
-import * as schema from './validation/consent-api';
+import { validateConsent } from './validation/consent-api';
 
 export class UserConsent extends PlatformAPI {
 	constructor(
@@ -16,27 +16,20 @@ export class UserConsent extends PlatformAPI {
 		super(`/users/${uuid}`, mode);
 	}
 
-	private decorateConsent(
+	private validateConsent(
 		consent: ConsentAPI.ConsentChannel
 	): ConsentAPI.ConsentChannel {
-		consent.source = consent.source || this.source;
-		return consent;
+		return validateConsent(consent, this.source);
 	}
 
-	private async validateConsentPayload(
-		consent: ConsentAPI.ConsentChannel
-	): Promise<ConsentAPI.ConsentChannel> {
-		const validConsent = await schema.validateObject(consent, schema.consent);
-		return this.decorateConsent(validConsent);
-	}
-
-	private async validateConsentRecordPayload(
+	private validateConsentRecord(
 		consents: ConsentAPI.ConsentCategories
-	): Promise<ConsentAPI.ConsentCategories> {
-		let validConsents = await schema.validateObject(consents, schema.record);
-		for (let [category, value] of Object.entries(validConsents)) {
+	): ConsentAPI.ConsentCategories {
+		let validConsents = {};
+		for (let [category, value] of Object.entries(consents)) {
+			validConsents[category] = {};
 			for (let [channel, consent] of Object.entries(value)) {
-				validConsents[category][channel] = this.decorateConsent(consent);
+				validConsents[category][channel] = this.validateConsent(consent);
 			}
 		}
 		return validConsents;
@@ -72,7 +65,7 @@ export class UserConsent extends PlatformAPI {
 		channel: string,
 		consent: ConsentAPI.ConsentChannel
 	): Promise<ConsentAPI.ConsentUnit> {
-		const payload = await this.validateConsentPayload(consent);
+		const payload = this.validateConsent(consent);
 
 		const createdConsent = (await this.request(
 			'POST',
@@ -90,7 +83,7 @@ export class UserConsent extends PlatformAPI {
 	public async createConsentRecord(
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
-		const payload = await this.validateConsentRecordPayload(consents);
+		const payload = this.validateConsentRecord(consents);
 
 		const createdConsents = (await this.request(
 			'POST',
@@ -110,7 +103,7 @@ export class UserConsent extends PlatformAPI {
 		channel: string,
 		consent: ConsentAPI.ConsentChannel
 	): Promise<ConsentAPI.ConsentUnit> {
-		const payload = await this.validateConsentPayload(consent);
+		const payload = this.validateConsent(consent);
 
 		const updatedConsent = (await this.request(
 			'PATCH',
@@ -128,7 +121,7 @@ export class UserConsent extends PlatformAPI {
 	public async updateConsentRecord(
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
-		let payload = await this.validateConsentRecordPayload(consents);
+		let payload = this.validateConsentRecord(consents);
 		const { version, data: existingRecord } = await this.getConsentRecord();
 
 		const updatedConsents = (await this.request(

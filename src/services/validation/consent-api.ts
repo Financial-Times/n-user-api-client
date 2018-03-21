@@ -1,32 +1,30 @@
-import { ObjectSchema, object, bool, string, validate } from 'joi';
-import { ErrorWithData } from '../../utils/error';
+import { ConsentAPI } from '../../types/consent-api';
 
-const validationOptions = {
-	abortEarly: true,
-	stripUnknown: true
-};
+import { errorTypes, ErrorWithData } from '../../utils/error';
 
-export const consent: ObjectSchema = object().keys({
-	status: bool().required(),
-	lbi: bool().default(false),
-	fow: string().min(3).required(),
-	source: string().min(3)
+const validationError = new ErrorWithData('Payload validation error', {
+	api: 'CONSENT_API',
+	action: 'REQUEST_BODY_VALIDATION',
+	statusCode: 400,
+	type: errorTypes.VALIDATION
 });
 
-export const category: ObjectSchema = object().pattern(/\w+/, consent);
+function parseBoolean(value: any): boolean {
+	return typeof value === 'string' ? value === 'true' : value === true || false;
+}
 
-export const record: ObjectSchema = object().pattern(/\w+/, category);
-
-export function validateObject(object: any, schema: ObjectSchema): any {
-	const { error, value } = validate(object, schema, validationOptions);
-
-	if (error) {
-		throw new ErrorWithData('Invalid request body', {
-			api: 'CONSENT_API',
-			action: 'REQUEST_BODY_VALIDATION',
-			error: error.details
-		});
+export function validateConsent(
+	consent: ConsentAPI.ConsentChannel,
+	source: string
+): ConsentAPI.ConsentChannel {
+	if (consent.status === undefined || typeof consent.fow !== 'string') {
+		throw validationError;
 	}
 
-	return value;
+	return {
+		source: consent.source || source,
+		lbi: parseBoolean(consent.lbi),
+		status: parseBoolean(consent.status),
+		fow: consent.fow
+	};
 }

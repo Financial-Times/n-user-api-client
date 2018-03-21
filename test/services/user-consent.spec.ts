@@ -74,7 +74,7 @@ describe('UserConsent - consent API wrapper', () => {
 
 		it('should decorate consent with source if not specified', () => {
 			delete consent.source;
-			expect(api.decorateConsent(consent)).to.have.property(
+			expect(api.validateConsent(consent)).to.have.property(
 				'source',
 				test.source
 			);
@@ -82,7 +82,7 @@ describe('UserConsent - consent API wrapper', () => {
 
 		it('should not overwrite consent source', () => {
 			consent.source = `${test.source}-other`;
-			expect(api.decorateConsent(consent)).to.have.property(
+			expect(api.validateConsent(consent)).to.have.property(
 				'source',
 				`${test.source}-other`
 			);
@@ -91,7 +91,7 @@ describe('UserConsent - consent API wrapper', () => {
 		it('should error for invalid consent payloads', async () => {
 			consent.status = 'not-a-boolean';
 			try {
-				await api.validateConsentPayload(consent);
+				await api.validateConsent(consent);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
 			}
@@ -99,14 +99,14 @@ describe('UserConsent - consent API wrapper', () => {
 
 		it('should strip consent payloads of invalid properties', async () => {
 			consent.invalidProperty = 'foo';
-			const validConsent = await api.validateConsentPayload(consent);
+			const validConsent = await api.validateConsent(consent);
 			delete consent.invalidProperty;
 			expect(validConsent).to.deep.equal(consent);
 		});
 
 		it('should default lbi:false on consent payloads', async () => {
 			delete consent.lbi;
-			const validConsent = await api.validateConsentPayload(consent);
+			const validConsent = await api.validateConsent(consent);
 			consent.lbi = false;
 			expect(validConsent).to.deep.equal(consent);
 		});
@@ -120,7 +120,7 @@ describe('UserConsent - consent API wrapper', () => {
 					}
 				}
 			};
-			const validConsent = await api.validateConsentRecordPayload(consent);
+			const validConsent = await api.validateConsentRecord(consent);
 			consent.category.channel.lbi = false;
 			consent.category.channel.source = test.source;
 			expect(validConsent).to.deep.equal(consent);
