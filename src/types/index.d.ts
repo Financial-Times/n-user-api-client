@@ -54,3 +54,10 @@ export interface UpdateUserOptions {
     passwordData?: any,
     userUpdate?: any
 }
+
+export interface LoginUserOptions {
+    email: string,
+    password: string,
+    apiHost: string,
+    apiKey: string,
+}
