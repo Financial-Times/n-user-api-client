@@ -46,6 +46,21 @@ apiHost, apiKey - the consumer app should pass these in, based on Vault env vars
 
 A user ID (string)
 
+### loginUser
+#### Arguments
+
+email (string)
+
+password (string)
+
+apiHost, apiKey - the consumer app should pass these in, based on Vault env vars
+
+
+#### Return value
+
+[fresh session data](https://developer.ft.com/portal/docs-membership-platform-api-post-login) will be returned.
+
+
 ### updateUserProfile
 #### Arguments
 
@@ -78,7 +93,7 @@ If successful, the user will be reauthenticated and the [fresh session data](htt
 
 ## Build
 
-The module is written in typescript - compile to the dist/ folder with: 
+The module is written in typescript - compile to the dist/ folder with:
 
 ```
 make build
