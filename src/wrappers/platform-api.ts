@@ -2,7 +2,8 @@ require('isomorphic-fetch');
 import { mergeDeepRight } from 'ramda';
 import { APIMode } from './helpers/api-mode';
 
-import { ErrorWithData } from '../utils/error';
+import { apiErrorType, ErrorWithData } from '../utils/error';
+
 
 export class PlatformAPI {
 	protected url: string;
@@ -37,11 +38,15 @@ export class PlatformAPI {
 	}
 
 	private get apiHost(): string {
-		return PlatformAPI.guardEnvironmentVariable(`MEMBERSHIP_API_HOST_${this.mode}`);
+		return PlatformAPI.guardEnvironmentVariable(
+			`MEMBERSHIP_API_HOST_${this.mode}`
+		);
 	}
 
 	private get apiKey(): string {
-		return PlatformAPI.guardEnvironmentVariable(`MEMBERSHIP_API_KEY_${this.mode}`);
+		return PlatformAPI.guardEnvironmentVariable(
+			`MEMBERSHIP_API_KEY_${this.mode}`
+		);
 	}
 
 	protected async _fetch(
@@ -49,17 +54,21 @@ export class PlatformAPI {
 		options: RequestInit,
 		errorMsg: string
 	): Promise<any> {
+		let statusCode = 500;
+
 		try {
 			const response = await fetch(`${this.url}${path}`, options);
-			if(!response.ok) {
-				throw new Error(`API responded with ${response.status}`);
+			if (!response.ok) {
+				statusCode = response.status;
+				throw new Error(`API responded with status ${response.status}`);
 			}
 			return response;
 		} catch (error) {
 			throw new ErrorWithData(errorMsg, {
 				api: 'MEMBERSHIP_PLATFORM',
 				url: this.url,
-				error
+				statusCode,
+				type: apiErrorType(statusCode)
 			});
 		}
 	}
