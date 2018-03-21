@@ -25,8 +25,8 @@ describe('updateUser', () => {
 			nocks.userPasswordApi({ userId: params.userId });
 			nocks.loginApi();
 			const sessionData = await changeUserPassword(params);
-			expect(sessionData.sessionToken).to.be.a.string;
-			expect(sessionData.secureSessionToken).to.be.a.string;
+			expect(sessionData.sessionToken).to.be.a('string');
+			expect(sessionData.secureSessionToken).to.be.a('string');
 		});
 
 		it('sends new password to login service when successful', async () => {
@@ -166,7 +166,6 @@ describe('updateUser', () => {
 		};
 		let responseType;
 
-		
 		it('merges update with existing user record when successful', async () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
