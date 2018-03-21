@@ -1,29 +1,5 @@
 import * as nock from 'nock';
-
-const responses = {
-	userIdBySessionSuccess: {
-		uuid: 'user-456',
-		creationTime: Date.now() - 1000 * 60 * 29
-	},
-	userIdBySessionInvalid: {},
-	userIdBySessionStale: {
-		uuid: 'user-456',
-		creationTime: Date.now() - 1000 * 60 * 31
-	},
-	genericError: {
-		errors: [
-			{
-				message: 'Error message'
-			}
-		]
-	},
-	noSubscription: require('./responses/graphql-no-subscription.json'),
-	subscribed: require('./responses/graphql-subscribed.json'),
-	unsubscribed: require('./responses/graphql-subscribed.json'),
-	trialActive: require('./responses/graphql-trial-active.json'),
-	trialCancelled: require('./responses/graphql-trial-cancelled.json'),
-	loginSuccess: require('./responses/login-api.json')
-};
+import { test, testEnv, responses } from './constants';
 
 const getResponse = (statusCode, responseType) => {
 	let response;
@@ -65,6 +41,18 @@ export const nocks = {
 		return nock('https://api.ft.com')
 			.get(`/sessions/s/${session}`)
 			.query(true)
+			.reply(statusCode, response);
+	},
+
+	consentApi: (path: string, method: string, statusCode: number, response?: any): nock.Scope => {
+		return nock(testEnv.MEMBERSHIP_API_HOST_MOCK)
+			[method](`/users/${test.uuid}/${test.scope}${path}`)
+			.reply(statusCode, response);
+	},
+
+	platformApi: (method: string, statusCode: number, response?: any): nock.Scope => {
+		return nock(testEnv.MEMBERSHIP_API_HOST_MOCK)
+			[method]('/')
 			.reply(statusCode, response);
 	},
 
@@ -116,6 +104,16 @@ export const nocks = {
 	}
 };
 
+const { MEMBERSHIP_API_HOST_MOCK, MEMBERSHIP_API_KEY_MOCK } = process.env;
+
+beforeEach(() => {
+	Object.assign(process.env, testEnv);
+});
+
 afterEach(() => {
 	nock.cleanAll();
+	Object.assign(process.env, {
+		MEMBERSHIP_API_HOST_MOCK,
+		MEMBERSHIP_API_KEY_MOCK
+	});
 });
