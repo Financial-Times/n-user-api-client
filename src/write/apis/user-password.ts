@@ -1,17 +1,17 @@
-require('isomorphic-fetch');
+import('isomorphic-fetch');
 
 import { ErrorWithData } from '../../utils/error';
 
 export const updateUserPasswordApi = ({
 	userId,
 	passwordData,
-	authToken,
 	apiHost,
-	apiKey
+	apiKey,
+    appName
 }) => {
 	return new Promise(async (resolve, reject) => {
 		const errorMsg = 'Could not change user password';
-		const url = `${apiHost}/users/${userId}/credentials/change-password`;
+		const url = `${apiHost}/idm/v1/users/${userId}/credentials/change-password`;
 		const body = {
 			password: passwordData.newPassword,
 			oldPassword: passwordData.oldPassword,
@@ -22,7 +22,7 @@ export const updateUserPasswordApi = ({
 			headers: {
 				'Content-Type': 'application/json',
 				'X-Api-Key': apiKey,
-				Authorization: `Bearer ${authToken}`
+				'User-Agent': `n-user-api-client-${appName}`
 			},
 			method: 'POST',
 			body: JSON.stringify(body)

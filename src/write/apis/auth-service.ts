@@ -1,4 +1,4 @@
-require('isomorphic-fetch');
+import('isomorphic-fetch');
 import * as url from 'url';
 import * as querystring from 'querystring';
 import { ErrorWithData } from '../../utils/error';
@@ -79,7 +79,7 @@ export const getAuthToken = ({ session, apiHost, apiClientId }) => {
 				scope: 'profile_max'
 			};
 
-			const url = `${apiHost}/authorize?${querystring.stringify(params)}`;
+			const url = `${apiHost}/idm/v1/authorize?${querystring.stringify(params)}`;
 
 			const res = await fetch(url, getFetchOptions(session));
 
