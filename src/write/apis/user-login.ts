@@ -1,3 +1,5 @@
+require('isomorphic-fetch');
+
 import { ErrorWithData } from '../../utils/error';
 
 export const userLoginApi = ({ email, password, apiHost, apiKey }) => {
