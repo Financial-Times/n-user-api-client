@@ -35,14 +35,14 @@ export class GraphQlAPI {
 			const res = await membQl[queryMode](query, variables, this.options);
 			if (!res._ok) {
 				// valid response but contains errors
-				throw new Error(res.errors);
+				throw new Error(JSON.stringify(res.errors));
 			}
 			return res.data;
 		} catch (error) {
 			throw new ErrorWithData(errorMsg, {
 				api: 'MEMBERSHIP_GRAPHQL',
 				query,
-				error
+				error: JSON.parse(error)
 			});
 		}
 	}

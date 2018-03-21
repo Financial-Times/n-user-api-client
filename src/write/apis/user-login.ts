@@ -1,4 +1,4 @@
-require('isomorphic-fetch');
+import 'isomorphic-fetch';
 
 import { ErrorWithData } from '../../utils/error';
 
