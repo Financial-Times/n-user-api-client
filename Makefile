@@ -13,4 +13,4 @@ watch:
 build-production: build
 
 test:
-	mocha -r ts-node/register --require ./test/setup.ts --recursive **/*.spec.ts **/**/*.spec.ts --exit
+	mocha "test/**/*.spec.ts" -r ts-node/register --require ./test/setup.ts --exit
