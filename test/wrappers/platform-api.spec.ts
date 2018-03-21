@@ -44,7 +44,7 @@ describe('PlatformAPI wrapper', () => {
 				foo: 'bar'
 			}
 		};
-		const response = await api.request('GET', '', 'Error message', options);
+		await api.request('GET', '', 'Error message', options);
 		sinon.assert.calledOnce(spy);
 		sinon.assert.calledWithMatch(
 			spy,
