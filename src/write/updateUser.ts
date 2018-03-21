@@ -39,7 +39,7 @@ const mergeUserUpdateWithFetchedUser = ({
 
 const validateOptions = (opts, dataOption) => {
 	if (!opts) throw new Error('Options not supplied');
-	const stringOpts = ['session', 'apiHost', 'apiKey', 'apiClientId', 'userId'];
+	const stringOpts = ['session', 'apiHost', 'apiKey', 'apiClientId', 'userId', 'appName'];
 	let invalidOptions = [];
 	stringOpts.forEach(stringOpt => {
 		if (typeof opts[stringOpt] !== 'string') invalidOptions.push(stringOpt);
