@@ -9,7 +9,7 @@ export class PlatformAPI {
 
 	constructor(
 		protected commonPath: string,
-		protected mode: APIMode = APIMode.Production,
+		protected mode: any = APIMode.Production,
 		protected options: RequestInit = {}
 	) {
 		this.options = mergeDeepRight(

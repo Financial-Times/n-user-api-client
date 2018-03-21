@@ -10,7 +10,7 @@ export class UserConsent extends PlatformAPI {
 	constructor(
 		uuid: string,
 		private source: string,
-		mode: APIMode = APIMode.Production,
+		mode: any = APIMode.Production,
 		private scope: string = 'FTPINK'
 	) {
 		super(`/users/${uuid}`, mode);
@@ -128,17 +128,18 @@ export class UserConsent extends PlatformAPI {
 	public async updateConsentRecord(
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
-		const payload = await this.validateConsentRecordPayload(consents);
+		let payload = await this.validateConsentRecordPayload(consents);
 		const { version, data: existingRecord } = await this.getConsentRecord();
-
-		const updatedRecord = mergeDeepRight(existingRecord, consents);
 
 		const updatedConsents = (await this.request(
 			'PUT',
 			`/${this.scope}`,
 			'Could not update consent',
 			{
-				body: JSON.stringify({ version, data: updatedRecord })
+				body: JSON.stringify({
+					version,
+					data: mergeDeepRight(existingRecord, payload)
+				})
 			}
 		)) as ConsentAPI.ConsentRecord;
 
