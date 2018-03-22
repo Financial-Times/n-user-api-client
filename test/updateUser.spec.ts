@@ -155,7 +155,7 @@ describe('updateUser', () => {
 		it('throws if invalid options supplied', done => {
 			changeUserPassword({ apiKey: '' } as UpdateUserOptions)
 				.catch(err => {
-					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiClientId, userId, passwordData');
+					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiClientId, userId, appName, passwordData');
 					done();
 				});
 		});
@@ -278,7 +278,7 @@ describe('updateUser', () => {
 		it('throws if invalid options supplied', done => {
 			updateUserProfile({ userUpdate: '' } as UpdateUserOptions)
 				.catch(err => {
-					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiKey, apiClientId, userId, userUpdate');
+					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiKey, apiClientId, userId, appName, userUpdate');
 					done();
 				});
 		});
