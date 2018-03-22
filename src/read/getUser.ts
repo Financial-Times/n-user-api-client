@@ -1,5 +1,4 @@
 import {canned} from '@financial-times/n-memb-gql-client';
-import {metrics} from '@financial-times/n-ui';
 import {logger} from '../utils/logger';
 import {GraphQlUserApiResponse} from '../types';
 import * as R from 'ramda';
@@ -11,8 +10,6 @@ const handleGraphQlError = (res: any, defaultErrorMsg: string, data?: any) => {
     let errorMsg = defaultErrorMsg;
     if (res && !res._ok && res.errors.length)
         errorMsg = res.errors[0].message;
-    if (data.graphQlQuery)
-        metrics.count(`graphQl.${data.graphQlQuery}.failure`, 1);
     const error = new ErrorWithData(errorMsg, {
         ...data,
         statusCode: 500
