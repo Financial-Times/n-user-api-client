@@ -161,12 +161,12 @@ describe('updateUser', () => {
 		});
 
 		it('throws if invalid context options supplied', done => {
-		   changeUserPassword({apiKey: '', session: '', apiHost: '', apiClientId: '', userId: '', appName: '', passwordData: {}, requestContext: {}} as UpdateUserOptions)
+			changeUserPassword({apiKey: '', session: '', apiHost: '', apiClientId: '', userId: '', appName: '', passwordData: {}, requestContext: {}} as UpdateUserOptions)
 				.catch(err => {
 					expect(err.message).to.equal('Invalid option(s): remoteIp, browserUserAgent, countryCode');
 					done();
 				});
-	   });
+		});
 	});
 
 	describe('updateUserProfile', () => {

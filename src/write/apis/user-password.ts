@@ -7,7 +7,7 @@ export const updateUserPasswordApi = ({
 	passwordData,
 	apiHost,
 	apiKey,
-    appName
+	appName
 }) => {
 	return new Promise(async (resolve, reject) => {
 		const errorMsg = 'Could not change user password';
