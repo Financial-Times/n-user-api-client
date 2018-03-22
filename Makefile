@@ -14,3 +14,8 @@ build-production: build
 
 test:
 	mocha "test/**/*.spec.ts" -r ts-node/register --require ./test/setup.ts --exit
+
+_verify_tslint:
+	@if [ -e tslint.json ]; then npx tslint -c tslint.json "src/**/*.ts" "test/**/*.ts" && $(DONE); fi
+
+verify-with-tslint: _verify_tslint verify

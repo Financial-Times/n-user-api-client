@@ -1,4 +1,4 @@
-require('isomorphic-fetch');
+import 'isomorphic-fetch';
 import { errorTypes, ErrorWithData } from '../../utils/error';
 import { isSessionStale } from '../transforms/session-freshness';
 

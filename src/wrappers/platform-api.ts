@@ -1,4 +1,4 @@
-require('isomorphic-fetch');
+import 'isomorphic-fetch';
 import { mergeDeepRight } from 'ramda';
 import { APIMode } from './helpers/api-mode';
 

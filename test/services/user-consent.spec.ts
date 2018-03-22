@@ -1,58 +1,25 @@
 import { expect } from 'chai';
-import * as nock from 'nock';
 import { mergeDeepRight } from 'ramda';
+import { nocks } from '../nocks';
 
 import { UserConsent } from '../../src/services/user-consent';
 import { APIMode } from '../../src/wrappers/helpers/api-mode';
 
 import { ErrorWithData } from '../../src/utils/error';
 
+import { test, testEnv } from '../constants';
+
 const consentRecordResponse = require('../responses/consent-api-consent-record.json');
-
-const testEnv = {
-	MEMBERSHIP_API_HOST_MOCK: 'http://mock-api-host.ft.com',
-	MEMBERSHIP_API_KEY_MOCK: 'mock-api-key'
-};
-
-const { MEMBERSHIP_API_HOST_MOCK, MEMBERSHIP_API_KEY_MOCK } = process.env;
-
-const test = {
-	uuid: 'test-uuid',
-	source: 'test-source',
-	scope: 'TEST',
-	category: 'marketing',
-	channel: 'byEmail'
-};
 
 const consentRecord = consentRecordResponse.data;
 const consentUnit = consentRecordResponse.data[test.category][test.channel];
 const consentResponse = { data: consentUnit };
 
-function nockConsentAPI(
-	path: string,
-	method: string,
-	statusCode: number,
-	response?: any
-): nock.Scope {
-	return nock(testEnv.MEMBERSHIP_API_HOST_MOCK)
-		[method](`/users/${test.uuid}/${test.scope}${path}`)
-		.reply(statusCode, response);
-}
-
 describe('UserConsent - consent API wrapper', () => {
 	let api;
 
 	beforeEach(() => {
-		Object.assign(process.env, testEnv);
 		api = new UserConsent(test.uuid, test.source, APIMode.Mock, test.scope);
-	});
-
-	afterEach(() => {
-		nock.cleanAll();
-		Object.assign(process.env, {
-			MEMBERSHIP_API_HOST_MOCK,
-			MEMBERSHIP_API_KEY_MOCK
-		});
 	});
 
 	it('should default scope to FTPINK', () => {
@@ -129,7 +96,7 @@ describe('UserConsent - consent API wrapper', () => {
 
 	context('getConsent', () => {
 		it('should get a consent unit for a user', async () => {
-			nockConsentAPI(
+			nocks.consentApi(
 				`/${test.category}/${test.channel}`,
 				'get',
 				200,
@@ -140,7 +107,7 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			nockConsentAPI(`/${test.category}/${test.channel}`, 'get', 400);
+			nocks.consentApi(`/${test.category}/${test.channel}`, 'get', 400);
 			try {
 				await api.getConsent(test.category, test.channel);
 			} catch (error) {
@@ -151,13 +118,13 @@ describe('UserConsent - consent API wrapper', () => {
 
 	context('getConsentRecord', () => {
 		it('should get the consent record for a user', async () => {
-			nockConsentAPI('', 'get', 200, consentRecordResponse);
+			nocks.consentApi('', 'get', 200, consentRecordResponse);
 			const response = await api.getConsentRecord();
 			expect(response).to.deep.equal(consentRecord);
 		});
 
 		it('should throw a decorated error', async () => {
-			nockConsentAPI('', 'get', 400);
+			nocks.consentApi('', 'get', 400);
 			try {
 				await api.getConsentRecord();
 			} catch (error) {
@@ -168,7 +135,7 @@ describe('UserConsent - consent API wrapper', () => {
 
 	context('createConsent', () => {
 		it('should create a consent unit for a user', async () => {
-			nockConsentAPI(
+			nocks.consentApi(
 				`/${test.category}/${test.channel}`,
 				'post',
 				200,
@@ -183,7 +150,7 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			nockConsentAPI(`/${test.category}/${test.channel}`, 'post', 400);
+			nocks.consentApi(`/${test.category}/${test.channel}`, 'post', 400);
 			try {
 				await api.createConsent(test.category, test.channel, consentUnit);
 			} catch (error) {
@@ -194,13 +161,13 @@ describe('UserConsent - consent API wrapper', () => {
 
 	context('createConsentRecord', () => {
 		it('should create a consent record for a user', async () => {
-			nockConsentAPI('', 'post', 200, consentRecordResponse);
+			nocks.consentApi('', 'post', 200, consentRecordResponse);
 			const response = await api.createConsentRecord(consentRecord);
 			expect(response).to.deep.equal(consentRecord);
 		});
 
 		it('should throw a decorated error', async () => {
-			nockConsentAPI('', 'post', 400);
+			nocks.consentApi('', 'post', 400);
 			try {
 				await api.createConsentRecord(consentRecord);
 			} catch (error) {
@@ -211,7 +178,7 @@ describe('UserConsent - consent API wrapper', () => {
 
 	context('updateConsent', () => {
 		it('should update a consent unit for a user', async () => {
-			nockConsentAPI(
+			nocks.consentApi(
 				`/${test.category}/${test.channel}`,
 				'patch',
 				200,
@@ -226,7 +193,7 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			nockConsentAPI(`/${test.category}/${test.channel}`, 'patch', 400);
+			nocks.consentApi(`/${test.category}/${test.channel}`, 'patch', 400);
 			try {
 				await api.updateConsent(test.category, test.channel, consentUnit);
 			} catch (error) {
@@ -252,14 +219,14 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should update the consent record for a user', async () => {
-			nockConsentAPI('', 'get', 200, consentRecordResponse);
-			nockConsentAPI('', 'put', 200, updatedConsentRecord);
+			nocks.consentApi('', 'get', 200, consentRecordResponse);
+			nocks.consentApi('', 'put', 200, updatedConsentRecord);
 			const response = await api.updateConsentRecord(payload);
 			expect(response).to.deep.equal(updatedConsentRecord.data);
 		});
 
 		it('should throw a decorated error', async () => {
-			nockConsentAPI('', 'put', 400);
+			nocks.consentApi('', 'put', 400);
 			try {
 				await api.updateConsentRecord(payload);
 			} catch (error) {

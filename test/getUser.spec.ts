@@ -35,7 +35,7 @@ describe('getUser', () => {
 			apiHost: 'https://api.ft.com',
 			apiKey: 'apiKey'
 		};
-		
+
 		it('resolves with a user ID when successful', async () => {
 			nocks.userIdBySession({session: params.session});
 			const sessionData = await getUserIdAndSessionData(params);

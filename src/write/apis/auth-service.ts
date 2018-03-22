@@ -1,4 +1,4 @@
-import('isomorphic-fetch');
+import 'isomorphic-fetch';
 import * as url from 'url';
 import * as querystring from 'querystring';
 import { ErrorWithData } from '../../utils/error';
