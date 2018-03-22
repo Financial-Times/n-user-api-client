@@ -11,7 +11,7 @@ export const updateUserProfileApi = ({
 	appName
 }) => {
 	return new Promise(async (resolve, reject) => {
-		const url = `${apiHost}/idm/v1/users/${userId}`;
+		const url = `${apiHost}/idm/v1/users/${userId}/profile`;
 		const errorMsg = 'Could not update user';
 		const options = {
 			timeout: 10000,

@@ -82,7 +82,7 @@ export const nocks = {
 
 	userApi: ({ statusCode = 200, userId } = {} as any): nock.Scope => {
 		return nock('https://api.ft.com')
-			.put(`/idm/v1/users/${userId}`)
+			.put(`/idm/v1/users/${userId}/profile`)
 			.reply(statusCode, (uri, requestBody) => requestBody);
 	},
 
