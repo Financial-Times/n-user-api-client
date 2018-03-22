@@ -50,6 +50,21 @@ apiHost, apiKey - the consumer app should pass these in, based on Vault env vars
 
 A user ID (string)
 
+### loginUser
+#### Arguments
+
+email (string)
+
+password (string)
+
+apiHost, apiKey - the consumer app should pass these in, based on Vault env vars
+
+
+#### Return value
+
+[fresh session data](https://developer.ft.com/portal/docs-membership-platform-api-post-login) will be returned.
+
+
 ### updateUserProfile
 
 #### Arguments

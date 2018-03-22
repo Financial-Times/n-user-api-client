@@ -9,6 +9,15 @@ import {
 	UpdateUserOptions,
 	UserObject
 } from '../types';
+import { validateOptions } from '../utils/validate';
+
+const KEY_PROPERTIES = [
+	'session',
+	'apiHost',
+	'apiKey',
+	'apiClientId',
+	'userId'
+];
 
 const getUserAndAuthToken = ({
 	session,
@@ -37,24 +46,12 @@ const mergeUserUpdateWithFetchedUser = ({
 	};
 };
 
-const validateOptions = (opts, dataOption) => {
-	if (!opts) throw new Error('Options not supplied');
-	const stringOpts = ['session', 'apiHost', 'apiKey', 'apiClientId', 'userId'];
-	let invalidOptions = [];
-	stringOpts.forEach(stringOpt => {
-		if (typeof opts[stringOpt] !== 'string') invalidOptions.push(stringOpt);
-	});
-	if (typeof opts[dataOption] !== 'object') invalidOptions.push(dataOption);
-	if (invalidOptions.length)
-		throw new Error(`Invalid option(s): ${invalidOptions.join(', ')}`);
-};
-
 export const changeUserPassword = async (
 	opts: UpdateUserOptions
 ): Promise<any> => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			validateOptions(opts, 'passwordData');
+			validateOptions(opts, 'passwordData', KEY_PROPERTIES);
 			const {
 				session,
 				apiHost,
@@ -94,7 +91,7 @@ export const updateUserProfile = async (
 ): Promise<any> => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			validateOptions(opts, 'userUpdate');
+			validateOptions(opts, 'userUpdate', KEY_PROPERTIES);
 			const {
 				session,
 				apiHost,
