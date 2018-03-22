@@ -54,8 +54,8 @@ export interface UpdateUserOptions {
 }
 
 export interface LoginUserOptions {
-    email: string,
-    password: string,
-    apiHost: string,
-    apiKey: string,
+	email: string;
+	password: string;
+	apiHost: string;
+	apiKey: string;
 }
