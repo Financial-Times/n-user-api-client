@@ -72,7 +72,7 @@ export const nocks = {
 			.defaultReplyHeaders({
 				Location: `https://www.ft.com/preferences#${result}`
 			})
-			.get('/authorize')
+			.get('/idm/v1/authorize')
 			.query(true)
 			.reply(statusCode, function () {
 				authApiNock.request = this.req;
@@ -82,14 +82,14 @@ export const nocks = {
 
 	userApi: ({ statusCode = 200, userId } = {} as any): nock.Scope => {
 		return nock('https://api.ft.com')
-			.put(`/users/${userId}/profile`)
+			.put(`/idm/v1/users/${userId}/profile`)
 			.reply(statusCode, (uri, requestBody) => requestBody);
 	},
 
 	userPasswordApi: ({ statusCode = 200, userId } = {} as any): nock.Scope => {
 		const response = statusCode === 200 ? {} : responses.genericError;
 		return nock('https://api.ft.com')
-			.post(`/users/${userId}/credentials/change-password`)
+			.post(`/idm/v1/users/${userId}/credentials/change-password`)
 			.reply(statusCode, response);
 	},
 
@@ -98,7 +98,7 @@ export const nocks = {
 		const response =
 			statusCode === 200 ? responses.loginSuccess : responses.genericError;
 		let loginApiNock: any = nock('https://api.ft.com')
-			.post('/login', body => (loginApiNock.requestBody = body))
+			.post('/idm/v1/reauthenticate', body => (loginApiNock.requestBody = body))
 			.reply(statusCode, response);
 		return loginApiNock;
 	}

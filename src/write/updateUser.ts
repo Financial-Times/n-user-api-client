@@ -46,21 +46,54 @@ const mergeUserUpdateWithFetchedUser = ({
 	};
 };
 
+const validateOptions = (opts, dataOption, stringOpts) => {
+	if (!opts) throw new Error('Options not supplied');
+	let invalidOptions = [];
+	stringOpts.forEach(stringOpt => {
+		if (typeof opts[stringOpt] !== 'string') invalidOptions.push(stringOpt);
+	});
+	if (typeof opts[dataOption] !== 'object') invalidOptions.push(dataOption);
+	if (invalidOptions.length)
+		throw new Error(`Invalid option(s): ${invalidOptions.join(', ')}`);
+};
+
+
+const validateRequestContext = (opts) => {
+	if (!opts)
+		throw new Error('request context not supplied');
+	let invalidOptions = [];
+	const contextOpts = ['remoteIp', 'browserUserAgent', 'countryCode'];
+	contextOpts.forEach(stringOpt => {
+		if (typeof opts.requestContext[stringOpt] !== 'string')
+					invalidOptions.push(stringOpt);
+	});
+	if (invalidOptions.length)
+		throw new Error(`Invalid option(s): ${invalidOptions.join(', ')}`);
+};
+
 export const changeUserPassword = async (
 	opts: UpdateUserOptions
 ): Promise<any> => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			validateOptions(opts, 'passwordData', KEY_PROPERTIES);
+			validateRequestContext(opts);
+
 			const {
 				session,
 				apiHost,
 				apiKey,
 				apiClientId,
 				userId,
-				passwordData
+				passwordData,
+				appName
 			} = opts;
-			const [userApiResponse, authToken] = await getUserAndAuthToken({
+			const {
+				remoteIp,
+				browserUserAgent,
+				countryCode
+			} = opts.requestContext;
+			const [userApiResponse] = await getUserAndAuthToken({
 				session,
 				apiHost,
 				apiClientId
@@ -68,16 +101,20 @@ export const changeUserPassword = async (
 			const password = await updateUserPasswordApi({
 				userId,
 				passwordData,
-				authToken,
 				apiHost,
-				apiKey
+				apiKey,
+				appName
 			});
 			resolve(
 				await userLoginApi({
 					email: userApiResponse.profile.email,
 					password,
 					apiHost,
-					apiKey
+					apiKey,
+					appName,
+					remoteIp,
+					userAgent: browserUserAgent,
+					countryCode
 				})
 			);
 		} catch (err) {
@@ -98,7 +135,8 @@ export const updateUserProfile = async (
 				apiKey,
 				apiClientId,
 				userId,
-				userUpdate
+				userUpdate,
+				appName
 			} = opts;
 			const [userApiResponse, authToken] = await getUserAndAuthToken({
 				session,
@@ -115,7 +153,8 @@ export const updateUserProfile = async (
 					userUpdate: updateMergedWithFetchedUser,
 					authToken,
 					apiHost,
-					apiKey
+					apiKey,
+					appName
 				})
 			);
 		} catch (err) {

@@ -9,7 +9,13 @@ describe('updateUser', () => {
 		apiHost: 'https://api.ft.com',
 		apiKey: 'apiKey',
 		apiClientId: 'my-client-id',
-		userId: 'userId'
+		userId: 'userId',
+		appName: "my-app",
+		requestContext: {
+			remoteIp: "127.0.0.1",
+			browserUserAgent: "my user agent",
+			countryCode: "IRE"
+		}
 	};
 
 	describe('changeUserPassword', () => {
@@ -149,7 +155,15 @@ describe('updateUser', () => {
 		it('throws if invalid options supplied', done => {
 			changeUserPassword({ apiKey: '' } as UpdateUserOptions)
 				.catch(err => {
-					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiClientId, userId, passwordData');
+					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiClientId, userId, appName, passwordData');
+					done();
+				});
+		});
+
+		it('throws if invalid context options supplied', done => {
+			changeUserPassword({apiKey: '', session: '', apiHost: '', apiClientId: '', userId: '', appName: '', passwordData: {}, requestContext: {}} as UpdateUserOptions)
+				.catch(err => {
+					expect(err.message).to.equal('Invalid option(s): remoteIp, browserUserAgent, countryCode');
 					done();
 				});
 		});
@@ -264,7 +278,7 @@ describe('updateUser', () => {
 		it('throws if invalid options supplied', done => {
 			updateUserProfile({ userUpdate: '' } as UpdateUserOptions)
 				.catch(err => {
-					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiKey, apiClientId, userId, userUpdate');
+					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiKey, apiClientId, userId, appName, userUpdate');
 					done();
 				});
 		});

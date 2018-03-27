@@ -51,6 +51,14 @@ export interface UpdateUserOptions {
 	userId: string;
 	passwordData?: any;
 	userUpdate?: any;
+	appName: string,
+	requestContext?: RequestContext
+}
+
+export interface RequestContext {
+	remoteIp: string,
+	browserUserAgent: string,
+	countryCode: string
 }
 
 export interface LoginUserOptions {
