@@ -1,5 +1,5 @@
-const {expect} = require('chai');
-const API = require('../dist/main');
+import { expect } from 'chai';
+import * as API from '../src/main';
 
 describe('Public API', () => {
 
