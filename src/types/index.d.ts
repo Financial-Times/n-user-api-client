@@ -60,3 +60,10 @@ export interface RequestContext {
 	browserUserAgent: string,
 	countryCode: string
 }
+
+export interface LoginUserOptions {
+	email: string;
+	password: string;
+	apiHost: string;
+	apiKey: string;
+}

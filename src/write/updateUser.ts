@@ -9,6 +9,15 @@ import {
 	UpdateUserOptions,
 	UserObject
 } from '../types';
+import { validateOptions } from '../utils/validate';
+
+const KEY_PROPERTIES = [
+	'session',
+	'apiHost',
+	'apiKey',
+	'apiClientId',
+	'userId'
+];
 
 const getUserAndAuthToken = ({
 	session,
@@ -37,9 +46,8 @@ const mergeUserUpdateWithFetchedUser = ({
 	};
 };
 
-const validateOptions = (opts, dataOption) => {
+const validateOptions = (opts, dataOption, stringOpts) => {
 	if (!opts) throw new Error('Options not supplied');
-	const stringOpts = ['session', 'apiHost', 'apiKey', 'apiClientId', 'userId', 'appName'];
 	let invalidOptions = [];
 	stringOpts.forEach(stringOpt => {
 		if (typeof opts[stringOpt] !== 'string') invalidOptions.push(stringOpt);
@@ -68,8 +76,9 @@ export const changeUserPassword = async (
 ): Promise<any> => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			validateOptions(opts, 'passwordData');
+			validateOptions(opts, 'passwordData', KEY_PROPERTIES);
 			validateRequestContext(opts);
+
 			const {
 				session,
 				apiHost,
@@ -119,7 +128,7 @@ export const updateUserProfile = async (
 ): Promise<any> => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			validateOptions(opts, 'userUpdate');
+			validateOptions(opts, 'userUpdate', KEY_PROPERTIES);
 			const {
 				session,
 				apiHost,
