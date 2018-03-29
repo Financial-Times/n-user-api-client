@@ -5,9 +5,15 @@ import { UpdateUserOptions } from '../src/types/index';
 
 describe('updateUser', () => {
 	const baseParams = {
-		session: '123',
 		apiHost: 'https://api.ft.com',
 		apiKey: 'apiKey',
+		appName: 'my-app',
+		requestContext: {
+			remoteIp: '127.0.0.1',
+			browserUserAgent: 'my user agent',
+			countryCode: 'IRE'
+		},
+		session: '123',
 		apiClientId: 'my-client-id',
 		userId: 'userId'
 	};
@@ -35,7 +41,9 @@ describe('updateUser', () => {
 			nocks.userPasswordApi({ userId: params.userId });
 			const loginApiNock = nocks.loginApi();
 			await changeUserPassword(params);
-			expect(loginApiNock.requestBody.password).to.equal(params.passwordData.newPassword);
+			expect(loginApiNock.requestBody.password).to.equal(
+				params.passwordData.newPassword
+			);
 		});
 
 		it('should send client id and response type to auth API', async () => {
@@ -48,49 +56,45 @@ describe('updateUser', () => {
 			expect(authApiNock.request.path).to.include('response_type=token');
 		});
 
-		it('doesn\'t call password service when getUserBySession fails', done => {
+		it('does not call password service when getUserBySession fails', done => {
 			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
 			const passwordApiNock = nocks.userPasswordApi({ userId: params.userId });
-			changeUserPassword(params)
-				.catch(() => {
-					expect(passwordApiNock.isDone()).to.be.false;
-					done();
-				});
+			changeUserPassword(params).catch(() => {
+				expect(passwordApiNock.isDone()).to.be.false;
+				done();
+			});
 		});
 
-		it('doesn\'t call password service when getAuthToken fails', done => {
+		it('does not call password service when getAuthToken fails', done => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi({ statusCode: 500 });
 			const passwordApiNock = nocks.userPasswordApi({ userId: params.userId });
-			changeUserPassword(params)
-				.catch(() => {
-					expect(passwordApiNock.isDone()).to.be.false;
-					done();
-				});
+			changeUserPassword(params).catch(() => {
+				expect(passwordApiNock.isDone()).to.be.false;
+				done();
+			});
 		});
 
-		it('doesn\'t call login service when password isn\'t saved successfully', done => {
+		it('does not call login service when password is not saved successfully', done => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
 			const loginApiNock = nocks.loginApi();
 			nocks.userPasswordApi({ statusCode: 500 });
-			changeUserPassword(params)
-				.catch(() => {
-					expect(loginApiNock.isDone()).to.be.false;
-					done();
-				});
+			changeUserPassword(params).catch(() => {
+				expect(loginApiNock.isDone()).to.be.false;
+				done();
+			});
 		});
 
 		it('handles exception thrown within getUserBySession', done => {
 			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
 			nocks.userApi({ userId: params.userId });
-			changeUserPassword(params)
-				.catch(err => {
-					expect(err.message).to.equal('Unable to retrieve user');
-					done();
-				});
+			changeUserPassword(params).catch(err => {
+				expect(err.message).to.equal('Unable to retrieve user');
+				done();
+			});
 		});
 
 		it('handles exception thrown within getAuthToken', done => {
@@ -108,11 +112,10 @@ describe('updateUser', () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
 			nocks.userPasswordApi({ statusCode: 500 });
-			changeUserPassword(params)
-				.catch(err => {
-					expect(err.message).to.equal('Could not change user password');
-					done();
-				});
+			changeUserPassword(params).catch(err => {
+				expect(err.message).to.equal('Could not change user password');
+				done();
+			});
 		});
 
 		it('handles exception thrown within userLoginApi', done => {
@@ -120,38 +123,56 @@ describe('updateUser', () => {
 			nocks.authApi();
 			nocks.loginApi({ statusCode: 500 });
 			nocks.userPasswordApi({ userId: params.userId });
-			changeUserPassword(params)
-				.catch(err => {
-					expect(err.message).to.equal('Could not log user in');
-					done();
-				});
+			changeUserPassword(params).catch(err => {
+				expect(err.message).to.equal('Could not log user in');
+				done();
+			});
 		});
 
 		it('handles error if session is expired', done => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi({ expiredSession: true });
 			nocks.userApi();
-			changeUserPassword(params)
-				.catch(err => {
-					expect(err.message).to.equal('getAuthToken - Auth service - No access_token in Location header');
-					done();
-				});
+			changeUserPassword(params).catch(err => {
+				expect(err.message).to.equal(
+					'getAuthToken - Auth service - No access_token in Location header'
+				);
+				done();
+			});
 		});
 
 		it('throws if no options supplied', done => {
-			changeUserPassword(undefined)
-				.catch(err => {
-					expect(err.message).to.equal('Options not supplied');
-					done();
-				});
+			changeUserPassword(undefined).catch(err => {
+				expect(err.message).to.equal('Options not supplied');
+				done();
+			});
 		});
 
 		it('throws if invalid options supplied', done => {
-			changeUserPassword({ apiKey: '' } as UpdateUserOptions)
-				.catch(err => {
-					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiClientId, userId, passwordData');
-					done();
-				});
+			changeUserPassword({ apiKey: '' } as UpdateUserOptions).catch(err => {
+				expect(err.message).to.equal(
+					'Invalid option(s): apiHost, appName, session, apiClientId, userId, passwordData'
+				);
+				done();
+			});
+		});
+
+		it('throws if invalid context options supplied', done => {
+			changeUserPassword({
+				apiKey: '',
+				session: '',
+				apiHost: '',
+				apiClientId: '',
+				userId: '',
+				appName: '',
+				passwordData: {},
+				requestContext: {}
+			} as UpdateUserOptions).catch(err => {
+				expect(err.message).to.equal(
+					'Invalid option(s): remoteIp, browserUserAgent, countryCode'
+				);
+				done();
+			});
 		});
 	});
 
@@ -174,37 +195,34 @@ describe('updateUser', () => {
 			expect(response.user.firstName).to.equal('Jane');
 		});
 
-		it('doesn\'t call user service when getUserBySession fails', done => {
+		it('does not call user service when getUserBySession fails', done => {
 			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
 			const userApiNock = nocks.userApi({ userId: params.userId });
-			updateUserProfile(params)
-				.catch(() => {
-					expect(userApiNock.isDone()).to.be.false;
-					done();
-				});
+			updateUserProfile(params).catch(() => {
+				expect(userApiNock.isDone()).to.be.false;
+				done();
+			});
 		});
 
-		it('doesn\'t call user service when getAuthToken fails', done => {
+		it('does not call user service when getAuthToken fails', done => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi({ statusCode: 500 });
 			const userApiNock = nocks.userApi({ userId: params.userId });
-			updateUserProfile(params)
-				.catch(() => {
-					expect(userApiNock.isDone()).to.be.false;
-					done();
-				});
+			updateUserProfile(params).catch(() => {
+				expect(userApiNock.isDone()).to.be.false;
+				done();
+			});
 		});
 
 		it('handles exception thrown within getUserBySession', done => {
 			nocks.graphQlUserBySession({ responseType, statusCode: 500 });
 			nocks.authApi();
 			nocks.userApi({ userId: params.userId });
-			updateUserProfile(params)
-				.catch(err => {
-					expect(err.message).to.equal('Unable to retrieve user');
-					done();
-				});
+			updateUserProfile(params).catch(err => {
+				expect(err.message).to.equal('Unable to retrieve user');
+				done();
+			});
 		});
 
 		it('handles exception thrown within getAuthToken', done => {
@@ -222,11 +240,12 @@ describe('updateUser', () => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi({ expiredSession: true });
 			nocks.userApi();
-			updateUserProfile(params)
-				.catch(err => {
-					expect(err.message).to.equal('getAuthToken - Auth service - No access_token in Location header');
-					done();
-				});
+			updateUserProfile(params).catch(err => {
+				expect(err.message).to.equal(
+					'getAuthToken - Auth service - No access_token in Location header'
+				);
+				done();
+			});
 		});
 
 		it('handles exception thrown within mergeUserUpdateWithFetchedUser', done => {
@@ -234,39 +253,40 @@ describe('updateUser', () => {
 			nocks.authApi();
 			nocks.userApi();
 			updateUserProfile({
-				...baseParams, userUpdate: {}
-			})
-				.catch(err => {
-					expect(err.message).to.equal('mergeUserUpdateWithFetchedUser not supplied with valid user object or update');
-					done();
-				});
+				...baseParams,
+				userUpdate: {}
+			}).catch(err => {
+				expect(err.message).to.equal(
+					'mergeUserUpdateWithFetchedUser not supplied with valid user object or update'
+				);
+				done();
+			});
 		});
 
 		it('handles exception thrown within updateUserProfileApi', done => {
 			nocks.graphQlUserBySession({ responseType: 'subscribed' });
 			nocks.authApi();
-			nocks.userApi({statusCode: 500});
-			updateUserProfile(params)
-				.catch(err => {
-					expect(err.message).to.equal('Could not update user');
-					done();
-				});
+			nocks.userApi({ statusCode: 500 });
+			updateUserProfile(params).catch(err => {
+				expect(err.message).to.equal('Could not update user');
+				done();
+			});
 		});
 
 		it('throws if no options supplied', done => {
-			updateUserProfile(undefined)
-				.catch(err => {
-					expect(err.message).to.equal('Options not supplied');
-					done();
-				});
+			updateUserProfile(undefined).catch(err => {
+				expect(err.message).to.equal('Options not supplied');
+				done();
+			});
 		});
 
 		it('throws if invalid options supplied', done => {
-			updateUserProfile({ userUpdate: '' } as UpdateUserOptions)
-				.catch(err => {
-					expect(err.message).to.equal('Invalid option(s): session, apiHost, apiKey, apiClientId, userId, userUpdate');
-					done();
-				});
+			updateUserProfile({ userUpdate: '' } as UpdateUserOptions).catch(err => {
+				expect(err.message).to.equal(
+					'Invalid option(s): apiHost, apiKey, appName, session, apiClientId, userId, userUpdate'
+				);
+				done();
+			});
 		});
 	});
 });

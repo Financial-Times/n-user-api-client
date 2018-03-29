@@ -8,16 +8,19 @@ export const updateUserProfileApi = async ({
 	userUpdate,
 	authToken,
 	apiHost,
-	apiKey
+	apiKey,
+	appName
 }) => {
-	const url = `${apiHost}/users/${userId}/profile`;
+	const url = `${apiHost}/idm/v1/users/${userId}/profile`;
+	const platform = `n-user-api-client-${appName}`;
 	const errorMsg = 'Could not update user';
 	const options = {
 		timeout: 10000,
 		headers: {
 			'Content-Type': 'application/json',
 			'X-Api-Key': apiKey,
-			Authorization: `Bearer ${authToken}`
+			'Authorization': `Bearer ${authToken}`,
+			'User-Agent': platform
 		},
 		method: 'PUT',
 		body: JSON.stringify(userUpdate)

@@ -12,11 +12,18 @@ import {
 import { validateOptions } from '../utils/validate';
 
 const KEY_PROPERTIES = [
-	'session',
 	'apiHost',
 	'apiKey',
+	'appName',
+	'session',
 	'apiClientId',
 	'userId'
+];
+
+const REQUEST_CONTEXT_PROPERTIES = [
+	'remoteIp',
+	'browserUserAgent',
+	'countryCode'
 ];
 
 const getUserAndAuthToken = ({
@@ -50,13 +57,16 @@ export const changeUserPassword = async (
 	opts: UpdateUserOptions
 ): Promise<any> => {
 	validateOptions(opts, 'passwordData', KEY_PROPERTIES);
+	validateOptions(opts.requestContext, null, REQUEST_CONTEXT_PROPERTIES);
 	const {
 		session,
 		apiHost,
 		apiKey,
 		apiClientId,
+		appName,
 		userId,
-		passwordData
+		passwordData,
+		requestContext
 	} = opts;
 	const [userApiResponse, authToken] = await getUserAndAuthToken({
 		session,
@@ -66,15 +76,17 @@ export const changeUserPassword = async (
 	const password = await updateUserPasswordApi({
 		userId,
 		passwordData,
-		authToken,
 		apiHost,
-		apiKey
+		apiKey,
+		appName
 	});
 	return await userLoginApi({
 		email: userApiResponse.profile.email,
 		password,
 		apiHost,
-		apiKey
+		apiKey,
+		appName,
+		requestContext
 	});
 };
 
@@ -85,6 +97,7 @@ export const updateUserProfile = async (opts: UpdateUserOptions): Promise<any> =
 		apiHost,
 		apiKey,
 		apiClientId,
+		appName,
 		userId,
 		userUpdate
 	} = opts;
@@ -102,6 +115,7 @@ export const updateUserProfile = async (opts: UpdateUserOptions): Promise<any> =
 		userUpdate: updateMergedWithFetchedUser,
 		authToken,
 		apiHost,
-		apiKey
+		apiKey,
+		appName
 	});
 };

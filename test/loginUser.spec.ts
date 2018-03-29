@@ -5,10 +5,16 @@ import { LoginUserOptions } from '../src/types';
 
 describe('loginUser', () => {
 	const params = {
-		email: 'test@mail.com',
-		password: 'password',
+		apiHost: 'https://api.ft.com',
 		apiKey: 'apiKey',
-		apiHost: 'https://api.ft.com'
+		appName: 'my-app',
+		requestContext: {
+			remoteIp: '127.0.0.1',
+			browserUserAgent: 'my user agent',
+			countryCode: 'IRE'
+		},
+		email: 'test@mail.com',
+		password: 'password'
 	};
 
 	it('resolves with new session data when successful', async () => {

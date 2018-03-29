@@ -93,7 +93,7 @@ export const getAuthToken = async ({
 		scope: 'profile_max'
 	};
 
-	const url = `${apiHost}/authorize?${querystring.stringify(params)}`;
+	const url = `${apiHost}/idm/v1/authorize?${querystring.stringify(params)}`;
 
 	try {
 		const res = await fetch(url, getFetchOptions(session));

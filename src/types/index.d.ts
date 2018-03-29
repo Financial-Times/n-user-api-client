@@ -42,20 +42,29 @@ export interface UserObject {
 	profile: UserProfileObject;
 	subscription: any;
 }
+export interface RequestContext {
+	remoteIp: string;
+	browserUserAgent: string;
+	countryCode: string;
+}
 
-export interface UpdateUserOptions {
-	session: string;
+export interface APIContext {
 	apiHost: string;
 	apiKey: string;
+	appName: string;
+}
+
+export interface UpdateUserOptions extends APIContext {
 	apiClientId: string;
+	session: string;
 	userId: string;
 	passwordData?: any;
 	userUpdate?: any;
+	requestContext?: RequestContext;
 }
 
-export interface LoginUserOptions {
+export interface LoginUserOptions extends APIContext {
 	email: string;
 	password: string;
-	apiHost: string;
-	apiKey: string;
+	requestContext: RequestContext;
 }
