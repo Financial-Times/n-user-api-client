@@ -11,9 +11,10 @@ export class UserConsent extends PlatformAPI {
 		uuid: string,
 		private source: string,
 		mode: any = APIMode.Production,
-		private scope: string = 'FTPINK'
+		private scope: string = 'FTPINK',
+		envPrefix?: string
 	) {
-		super(`/users/${uuid}`, mode);
+		super(`/users/${uuid}`, mode, {}, envPrefix);
 	}
 
 	private validateConsent(

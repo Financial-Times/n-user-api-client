@@ -11,7 +11,8 @@ export class PlatformAPI {
 	constructor(
 		protected commonPath: string,
 		protected mode: any = APIMode.Production,
-		protected options: RequestInit = {}
+		protected options: RequestInit = {},
+		protected envPrefix: string = 'MEMBERSHIP_API'
 	) {
 		this.options = mergeDeepRight(
 			{
@@ -39,13 +40,13 @@ export class PlatformAPI {
 
 	private get apiHost(): string | undefined {
 		return PlatformAPI.guardEnvironmentVariable(
-			`MEMBERSHIP_API_HOST_${this.mode}`
+			`${this.envPrefix}_HOST_${this.mode}`
 		);
 	}
 
 	private get apiKey(): string | undefined {
 		return PlatformAPI.guardEnvironmentVariable(
-			`MEMBERSHIP_API_KEY_${this.mode}`
+			`${this.envPrefix}_KEY_${this.mode}`
 		);
 	}
 
