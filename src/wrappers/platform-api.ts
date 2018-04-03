@@ -70,7 +70,7 @@ export class PlatformAPI {
 		} catch (error) {
 			const e = new ErrorWithData(errorMsg, {
 				api: 'MEMBERSHIP_PLATFORM',
-				url: this.url,
+				url: `${this.url}${path}`,
 				error
 			});
 			logger.error(e);
