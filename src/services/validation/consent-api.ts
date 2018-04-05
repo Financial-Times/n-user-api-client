@@ -1,4 +1,6 @@
+import * as Joi from 'joi';
 import { ConsentAPI } from '../../types/consent-api';
+import { consentSchema, consentRecordSchema } from './schema';
 
 import { errorTypes, ErrorWithData } from '../../utils/error';
 
@@ -9,22 +11,28 @@ const validationError = new ErrorWithData('Payload validation error', {
 	type: errorTypes.VALIDATION
 });
 
-function parseBoolean(value: any): boolean {
-	return typeof value === 'string' ? value === 'true' : value === true || false;
-}
-
 export function validateConsent(
 	consent: ConsentAPI.ConsentChannel,
 	source: string
 ): ConsentAPI.ConsentChannel {
-	if (consent.status === undefined || typeof consent.fow !== 'string') {
+	consent.source = consent.source || source;
+	const { error, value } = Joi.validate(consent, consentSchema);
+
+	if (error) {
 		throw validationError;
 	}
 
-	return {
-		source: consent.source || source,
-		lbi: parseBoolean(consent.lbi),
-		status: parseBoolean(consent.status),
-		fow: consent.fow
-	};
+	return value;
+}
+
+export function validateConsentRecord(
+	consentRecord: ConsentAPI.ConsentCategories
+): ConsentAPI.ConsentCategories {
+	const { error, value } = Joi.validate(consentRecord, consentRecordSchema);
+
+	if (error) {
+		throw validationError;
+	}
+
+	return value;
 }
