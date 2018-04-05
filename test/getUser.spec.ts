@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { getUserBySession, getUserIdAndSessionData } from '../src/read/getUser';
-import {graphQlUserBySession, userIdBySession} from './nocks';
+import { graphQlUserBySession, userIdBySession } from './nocks';
 
 describe('getUser', () => {
 	const session = '123';

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { mergeDeepRight } from 'ramda';
-import {consentApi} from '../nocks';
+import { consentApi } from '../nocks';
 
 import { UserConsent } from '../../src/services/user-consent';
 import { APIMode } from '../../src/wrappers/helpers/api-mode';

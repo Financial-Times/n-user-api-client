@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { loginUser } from '../src/write/loginUser';
-import {loginApi} from './nocks';
+import { loginApi } from './nocks';
 
 describe('loginUser', () => {
 	const params = {

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {platformApi} from '../nocks';
+import { platformApi } from '../nocks';
 import * as sinon from 'sinon';
 
 import { PlatformAPI } from '../../src/wrappers/platform-api';

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { updateUserProfile, changeUserPassword } from '../src/write/updateUser';
-import {authApi, graphQlUserBySession, userIdBySession, userPasswordApi, loginApi, userApi} from './nocks';
+import { authApi, graphQlUserBySession, userIdBySession, userPasswordApi, loginApi, userApi } from './nocks';
 import { UpdateUserOptions } from '../src/types';
 
 describe('updateUser', () => {
