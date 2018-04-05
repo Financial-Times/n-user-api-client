@@ -48,10 +48,10 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should not overwrite consent source', () => {
-			consent.source = `${test.source}-other`;
+			consent.source = `${test.source}Original`;
 			expect(api.validateConsent(consent)).to.have.property(
 				'source',
-				`${test.source}-other`
+				`${test.source}Original`
 			);
 		});
 
@@ -83,13 +83,15 @@ describe('UserConsent - consent API wrapper', () => {
 				category: {
 					channel: {
 						fow: 'test-fow',
-						status: true
-					}
+						source: test.source,
+						status: true,
+						unknownProperty: true
+					},
 				}
 			};
 			const validConsent = await api.validateConsentRecord(consent);
+			delete consent.category.channel.unknownProperty;
 			consent.category.channel.lbi = false;
-			consent.category.channel.source = test.source;
 			expect(validConsent).to.deep.equal(consent);
 		});
 	});

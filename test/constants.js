@@ -1,7 +1,7 @@
 module.exports = {
     test: {
         uuid: 'test-uuid',
-        source: 'test-source',
+        source: 'testSource',
         scope: 'TEST',
         category: 'marketing',
         channel: 'byEmail'

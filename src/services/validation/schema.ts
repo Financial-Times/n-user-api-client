@@ -3,13 +3,14 @@ import * as Joi from 'joi';
 const alphaNumRx = /^\w+/;
 
 export const consentSchema: Joi.ObjectSchema = Joi.object().keys({
-	lbi: Joi.boolean().required(),
-	status: Joi.boolean().required(),
+	lbi: Joi.boolean()
+		.default(false),
+	status: Joi.boolean()
+		.required(),
 	source: Joi.string()
 		.alphanum()
 		.required(),
 	fow: Joi.string()
-		.alphanum()
 		.required()
 });
 
