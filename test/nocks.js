@@ -1,5 +1,5 @@
-const nock = require('nock');
-const { test, testEnv, responses } = require('./constants');
+const nock = require("nock");
+const { test, testEnv, responses } = require("./constants");
 
 const getResponse = (statusCode, responseType) => {
 	let response;
@@ -14,10 +14,10 @@ const getResponse = (statusCode, responseType) => {
 };
 
 const getUserIdAndSessionDataResponse = ({
-																					 statusCode,
-																					 isStale,
-																					 isValidUserId
-																				 }) => {
+	statusCode,
+	isStale,
+	isValidUserId
+}) => {
 	if (statusCode !== 200) return responses.genericError;
 	if (isStale) return responses.userIdBySessionStale;
 	if (!isValidUserId) return responses.userIdBySessionInvalid;
@@ -26,19 +26,19 @@ const getUserIdAndSessionDataResponse = ({
 
 module.exports = {
 	userIdBySession: ({
-											statusCode = 200,
-											session,
-											isStale = false,
-											isValidUserId = true
-										} = {}) => {
+		statusCode = 200,
+		session,
+		isStale = false,
+		isValidUserId = true
+	} = {}) => {
 		if (!session)
-			throw new Error('userIdBySession nock requires a session argument');
+			throw new Error("userIdBySession nock requires a session argument");
 		const response = getUserIdAndSessionDataResponse({
 			statusCode,
 			isStale,
 			isValidUserId
 		});
-		return nock('https://api.ft.com')
+		return nock("https://api.ft.com")
 			.get(`/sessions/s/${session}`)
 			.query(true)
 			.reply(statusCode, response);
@@ -52,43 +52,43 @@ module.exports = {
 
 	platformApi: (method, statusCode, response) => {
 		return nock(testEnv.MEMBERSHIP_API_HOST_MOCK)
-			[method]('/')
+			[method]("/")
 			.reply(statusCode, response);
 	},
 
 	graphQlUserBySession: ({ responseType, statusCode = 200 }) => {
 		const response = getResponse(statusCode, responseType);
-		return nock('https://api.ft.com')
-			.get('/memb-query/api/mma-user-by-session')
+		return nock("https://api.ft.com")
+			.get("/memb-query/api/mma-user-by-session")
 			.query(true)
 			.reply(statusCode, response);
 	},
 
 	authApi: ({ statusCode = 302, expiredSession = false } = {}) => {
 		const result = expiredSession
-			? '#error=invalid_scope&error_description=Cannot%20acquire%20valid%20scope.'
-			: 'access_token=a1b2c3';
-		let authApiNock = nock('https://api.ft.com')
+			? "#error=invalid_scope&error_description=Cannot%20acquire%20valid%20scope."
+			: "access_token=a1b2c3";
+		let authApiNock = nock("https://api.ft.com")
 			.defaultReplyHeaders({
 				Location: `https://www.ft.com/preferences#${result}`
 			})
-			.get('/authorize')
+			.get("/authorize")
 			.query(true)
-			.reply(statusCode, function () {
+			.reply(statusCode, function() {
 				authApiNock.request = this.req;
 			});
 		return authApiNock;
 	},
 
 	userApi: ({ statusCode = 200, userId } = {}) => {
-		return nock('https://api.ft.com')
+		return nock("https://api.ft.com")
 			.put(`/users/${userId}/profile`)
 			.reply(statusCode, (uri, requestBody) => requestBody);
 	},
 
 	userPasswordApi: ({ statusCode = 200, userId } = {}) => {
 		const response = statusCode === 200 ? {} : responses.genericError;
-		return nock('https://api.ft.com')
+		return nock("https://api.ft.com")
 			.post(`/users/${userId}/credentials/change-password`)
 			.reply(statusCode, response);
 	},
@@ -96,8 +96,8 @@ module.exports = {
 	loginApi: ({ statusCode = 200 } = {}) => {
 		const response =
 			statusCode === 200 ? responses.loginSuccess : responses.genericError;
-		let loginApiNock = nock('https://api.ft.com')
-			.post('/login', body => (loginApiNock.requestBody = body))
+		let loginApiNock = nock("https://api.ft.com")
+			.post("/login", body => (loginApiNock.requestBody = body))
 			.reply(statusCode, response);
 		return loginApiNock;
 	}
