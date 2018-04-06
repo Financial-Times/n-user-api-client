@@ -14,7 +14,7 @@ export class UserConsent extends PlatformAPI {
 		private scope: string = 'FTPINK',
 		envPrefix?: string
 	) {
-		super(`/users/${uuid}`, mode, {}, envPrefix);
+		super(`/consent/users/${uuid}`, mode, {}, envPrefix);
 	}
 
 	private validateConsent(
