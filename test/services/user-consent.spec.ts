@@ -1,239 +1,118 @@
-import { expect } from 'chai';
-import { mergeDeepRight } from 'ramda';
-import { consentApi } from '../nocks';
+const nock = require("nock");
+const { test, testEnv, responses } = require("./constants");
 
-import { UserConsent } from '../../src/services/user-consent';
-import { APIMode } from '../../src/wrappers/helpers/api-mode';
-
-import { ErrorWithData } from '../../src/utils/error';
-
-import { test, testEnv } from '../constants';
-
-const consentRecordResponse = require('../responses/consent-api-consent-record.json');
-
-const consentRecord = consentRecordResponse.data;
-const consentUnit = consentRecordResponse.data[test.category][test.channel];
-const consentResponse = { data: consentUnit };
-
-describe('UserConsent - consent API wrapper', () => {
-	let api;
-
-	beforeEach(() => {
-		api = new UserConsent(test.uuid, test.source, APIMode.Mock, test.scope);
-	});
-
-	it('should default scope to FTPINK', () => {
-		api = new UserConsent(test.uuid, test.source, APIMode.Mock);
-		expect(api.scope).to.equal('FTPINK');
-	});
-
-	context('validation', () => {
-		let consent;
-
-		beforeEach(() => {
-			consent = {
-				fow: 'test-fow',
-				lbi: false,
-				source: test.source,
-				status: true
-			};
-		});
-
-		it('should decorate consent with source if not specified', () => {
-			delete consent.source;
-			expect(api.validateConsent(consent)).to.have.property(
-				'source',
-				test.source
+const getResponse = (statusCode, responseType) => {
+	let response;
+	if (statusCode === 200) {
+		response = responses[responseType];
+		if (!response)
+			throw new Error(
+				`The specified Nock response '${responseType}' doesn't exist`
 			);
-		});
+	}
+	return response;
+};
 
-		it('should not overwrite consent source', () => {
-			consent.source = `${test.source}Original`;
-			expect(api.validateConsent(consent)).to.have.property(
-				'source',
-				`${test.source}Original`
-			);
-		});
+const getUserIdAndSessionDataResponse = ({
+	statusCode,
+	isStale,
+	isValidUserId
+}) => {
+	if (statusCode !== 200) return responses.genericError;
+	if (isStale) return responses.userIdBySessionStale;
+	if (!isValidUserId) return responses.userIdBySessionInvalid;
+	return responses.userIdBySessionSuccess;
+};
 
-		it('should error for invalid consent payloads', async () => {
-			consent.status = 'not-a-boolean';
-			try {
-				await api.validateConsent(consent);
-			} catch (error) {
-				expect(error).to.be.instanceof(ErrorWithData);
-			}
+module.exports = {
+	userIdBySession: ({
+		statusCode = 200,
+		session,
+		isStale = false,
+		isValidUserId = true
+	} = {}) => {
+		if (!session)
+			throw new Error("userIdBySession nock requires a session argument");
+		const response = getUserIdAndSessionDataResponse({
+			statusCode,
+			isStale,
+			isValidUserId
 		});
+		return nock("https://api.ft.com")
+			.get(`/sessions/s/${session}`)
+			.query(true)
+			.reply(statusCode, response);
+	},
 
-		it('should strip consent payloads of invalid properties', async () => {
-			consent.invalidProperty = 'foo';
-			const validConsent = await api.validateConsent(consent);
-			delete consent.invalidProperty;
-			expect(validConsent).to.deep.equal(consent);
-		});
+	consentApi: (path, method, statusCode, response) => {
+		return nock(testEnv.MEMBERSHIP_API_HOST_MOCK)
+			[method](`/consent/users/${test.uuid}/${test.scope}${path}`)
+			.reply(statusCode, response);
+	},
 
-		it('should default lbi:false on consent payloads', async () => {
-			delete consent.lbi;
-			const validConsent = await api.validateConsent(consent);
-			consent.lbi = false;
-			expect(validConsent).to.deep.equal(consent);
-		});
+	platformApi: (method, statusCode, response) => {
+		return nock(testEnv.MEMBERSHIP_API_HOST_MOCK)
+			[method]("/")
+			.reply(statusCode, response);
+	},
 
-		it('should create valid consent record payloads', async () => {
-			consent = {
-				category: {
-					channel: {
-						fow: 'test-fow',
-						source: test.source,
-						status: true,
-						unknownProperty: true
-					},
-				}
-			};
-			const validConsent = await api.validateConsentRecord(consent);
-			delete consent.category.channel.unknownProperty;
-			consent.category.channel.lbi = false;
-			expect(validConsent).to.deep.equal(consent);
-		});
-	});
+	graphQlUserBySession: ({ responseType, statusCode = 200 }) => {
+		const response = getResponse(statusCode, responseType);
+		return nock("https://api.ft.com")
+			.get("/memb-query/api/mma-user-by-session")
+			.query(true)
+			.reply(statusCode, response);
+	},
 
-	context('getConsent', () => {
-		it('should get a consent unit for a user', async () => {
-			consentApi(
-				`/${test.category}/${test.channel}`,
-				'get',
-				200,
-				consentResponse
-			);
-			const response = await api.getConsent(test.category, test.channel);
-			expect(response).to.deep.equal(consentUnit);
-		});
+	authApi: ({ statusCode = 302, expiredSession = false } = {}) => {
+		const result = expiredSession
+			? "#error=invalid_scope&error_description=Cannot%20acquire%20valid%20scope."
+			: "access_token=a1b2c3";
+		let authApiNock = nock("https://api.ft.com")
+			.defaultReplyHeaders({
+				Location: `https://www.ft.com/preferences#${result}`
+			})
+			.get("/authorize")
+			.query(true)
+			.reply(statusCode, function() {
+				authApiNock.request = this.req;
+			});
+		return authApiNock;
+	},
 
-		it('should throw a decorated error', async () => {
-			consentApi(`/${test.category}/${test.channel}`, 'get', 400);
-			try {
-				await api.getConsent(test.category, test.channel);
-			} catch (error) {
-				expect(error).to.be.instanceof(ErrorWithData);
-			}
-		});
-	});
+	userApi: ({ statusCode = 200, userId } = {}) => {
+		return nock("https://api.ft.com")
+			.put(`/users/${userId}/profile`)
+			.reply(statusCode, (uri, requestBody) => requestBody);
+	},
 
-	context('getConsentRecord', () => {
-		it('should get the consent record for a user', async () => {
-			consentApi('', 'get', 200, consentRecordResponse);
-			const response = await api.getConsentRecord();
-			expect(response).to.deep.equal(consentRecord);
-		});
+	userPasswordApi: ({ statusCode = 200, userId } = {}) => {
+		const response = statusCode === 200 ? {} : responses.genericError;
+		return nock("https://api.ft.com")
+			.post(`/users/${userId}/credentials/change-password`)
+			.reply(statusCode, response);
+	},
 
-		it('should throw a decorated error', async () => {
-			consentApi('', 'get', 400);
-			try {
-				await api.getConsentRecord();
-			} catch (error) {
-				expect(error).to.be.instanceof(ErrorWithData);
-			}
-		});
-	});
+	loginApi: ({ statusCode = 200 } = {}) => {
+		const response =
+			statusCode === 200 ? responses.loginSuccess : responses.genericError;
+		let loginApiNock = nock("https://api.ft.com")
+			.post("/login", body => (loginApiNock.requestBody = body))
+			.reply(statusCode, response);
+		return loginApiNock;
+	}
+};
 
-	context('createConsent', () => {
-		it('should create a consent unit for a user', async () => {
-			consentApi(
-				`/${test.category}/${test.channel}`,
-				'post',
-				200,
-				consentResponse
-			);
-			const response = await api.createConsent(
-				test.category,
-				test.channel,
-				consentUnit
-			);
-			expect(response).to.deep.equal(consentUnit);
-		});
+const { MEMBERSHIP_API_HOST_MOCK, MEMBERSHIP_API_KEY_MOCK } = process.env;
 
-		it('should throw a decorated error', async () => {
-			consentApi(`/${test.category}/${test.channel}`, 'post', 400);
-			try {
-				await api.createConsent(test.category, test.channel, consentUnit);
-			} catch (error) {
-				expect(error).to.be.instanceof(ErrorWithData);
-			}
-		});
-	});
+beforeEach(() => {
+	Object.assign(process.env, testEnv);
+});
 
-	context('createConsentRecord', () => {
-		it('should create a consent record for a user', async () => {
-			consentApi('', 'post', 200, consentRecordResponse);
-			const response = await api.createConsentRecord(consentRecord);
-			expect(response).to.deep.equal(consentRecord);
-		});
-
-		it('should throw a decorated error', async () => {
-			consentApi('', 'post', 400);
-			try {
-				await api.createConsentRecord(consentRecord);
-			} catch (error) {
-				expect(error).to.be.instanceof(ErrorWithData);
-			}
-		});
-	});
-
-	context('updateConsent', () => {
-		it('should update a consent unit for a user', async () => {
-			consentApi(
-				`/${test.category}/${test.channel}`,
-				'patch',
-				200,
-				consentResponse
-			);
-			const response = await api.updateConsent(
-				test.category,
-				test.channel,
-				consentUnit
-			);
-			expect(response).to.deep.equal(consentUnit);
-		});
-
-		it('should throw a decorated error', async () => {
-			consentApi(`/${test.category}/${test.channel}`, 'patch', 400);
-			try {
-				await api.updateConsent(test.category, test.channel, consentUnit);
-			} catch (error) {
-				expect(error).to.be.instanceof(ErrorWithData);
-			}
-		});
-	});
-
-	context('updateConsentRecord', () => {
-		const payload = {
-			newCategory: {
-				newChannel: {
-					status: true,
-					lbi: true,
-					fow: 'string',
-					source: 'string'
-				}
-			}
-		};
-
-		const updatedConsentRecord = mergeDeepRight(consentRecordResponse, {
-			data: payload
-		});
-
-		it('should update the consent record for a user', async () => {
-			consentApi('', 'get', 200, consentRecordResponse);
-			consentApi('', 'put', 200, updatedConsentRecord);
-			const response = await api.updateConsentRecord(payload);
-			expect(response).to.deep.equal(updatedConsentRecord.data);
-		});
-
-		it('should throw a decorated error', async () => {
-			consentApi('', 'put', 400);
-			try {
-				await api.updateConsentRecord(payload);
-			} catch (error) {
-				expect(error).to.be.instanceof(ErrorWithData);
-			}
-		});
+afterEach(() => {
+	nock.cleanAll();
+	Object.assign(process.env, {
+		MEMBERSHIP_API_HOST_MOCK,
+		MEMBERSHIP_API_KEY_MOCK
 	});
 });
