@@ -46,7 +46,7 @@ module.exports = {
 
 	consentApi: (path, method, statusCode, response) => {
 		return nock(testEnv.MEMBERSHIP_API_HOST_MOCK)
-			[method](`/users/${test.uuid}/${test.scope}${path}`)
+			[method](`/consent/users/${test.uuid}/${test.scope}${path}`)
 			.reply(statusCode, response);
 	},
 
