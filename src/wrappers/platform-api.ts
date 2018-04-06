@@ -28,6 +28,7 @@ export class PlatformAPI {
 	}
 
 	private static guardEnvironmentVariable(name: string) {
+		name = name.toUpperCase();
 		if (process.env[name]) {
 			return process.env[name];
 		}
