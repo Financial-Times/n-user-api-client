@@ -9,7 +9,7 @@ const validationError = (error: Joi.ValidationError) =>
 		api: 'CONSENT_API',
 		action: 'REQUEST_BODY_VALIDATION',
 		statusCode: 400,
-		error,
+		error: error.details,
 		type: errorTypes.VALIDATION
 	});
 
