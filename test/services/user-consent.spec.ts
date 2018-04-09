@@ -212,7 +212,7 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 	});
 
-	context.only('updateConsentRecord', () => {
+	context('updateConsentRecord', () => {
 		let payload;
 		
 		beforeEach(() => {
