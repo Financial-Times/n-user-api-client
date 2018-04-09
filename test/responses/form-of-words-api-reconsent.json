@@ -1,0 +1,59 @@
+{
+  "copy": {
+    "heading1": "We're improving how you stay up to date with the FT.",
+    "strapline": "Choose how we contact you.",
+    "dataUseLink": "How we use your data"
+  },
+  "consents": [
+    {
+      "heading": "Do you want Top stories & features?",
+      "label": "Get the most from The Financial Times with special reports, recommended reads and feature updates.",
+      "category": "enhancement",
+      "channels": [
+        {
+          "label": "By email",
+          "channel": "byEmail",
+          "lbi": false
+        },
+        {
+          "label": "By phone call",
+          "channel": "byPhoneCall",
+          "lbi": false
+        },
+        {
+          "label": "By post",
+          "channel": "byPost",
+          "lbi": false
+        }
+      ]
+    },
+    {
+      "heading": "Do you want Invites & offers from the FT?",
+      "label": "Receive exclusive event invitations, carefully-curated offers \u2028and promotions from The Financial Times.",
+      "category": "marketing",
+      "channels": [
+        {
+          "label": "By email",
+          "channel": "byEmail",
+          "lbi": false
+        },
+        {
+          "label": "By phone call",
+          "channel": "byPhoneCall",
+          "lbi": false
+        },
+        {
+          "label": "By post",
+          "channel": "byPost",
+          "lbi": false
+        }
+      ]
+    }
+  ],
+  "name": "reconsentB2C",
+  "scope": "FTPINK",
+  "metaSchemaVersion": "aeztGB.QgTBC2htWQOi6ohCbGzAK4dXL",
+  "id": "reconsentB2C/.dSYltHIQjrB5Dfm9gm4VCBWfjodx8Tf",
+  "version": ".dSYltHIQjrB5Dfm9gm4VCBWfjodx8Tf",
+  "creationDate": "2018-03-15T16:27:32.863Z"
+}

@@ -1,0 +1,48 @@
+{
+  "copy": {
+    "heading1": "Privacy settings",
+    "straplineSmall": "<p>We improve your experience of the FT by personalising parts of our site, app and emails with the info you give us and what we learn about you when you use it. You can control this information, but this may affect what you see.</p><p><strong>Don't worry</strong>. The Financial Times doesn't share your personal information with third-parties.</p>",
+    "dataUseLink": "How we use your information"
+  },
+  "consents": [
+    {
+      "heading": "Recommendations",
+      "category": "recommendations",
+      "channels": [
+        {
+          "label": "Personalised recommendations",
+          "description": "We help you find new content to read by showing you articles you may be interested in.",
+          "advisory": "If you turn this off, you may still see 'recommendations' but these won't be personalised to you.",
+          "channel": "personalisedRecommendations",
+          "lbi": false
+        }
+      ]
+    },
+    {
+      "heading": "Advertising",
+      "category": "advertising",
+      "channels": [
+        {
+          "label": "Adverts personalised to you",
+          "description": "We help you see personalised products and services that may be interesting to you.",
+          "advisory": "If you turn this off, you will still see adverts, but they may not be as relevant to you.",
+          "channel": "advertisingPersonalised",
+          "lbi": false
+        },
+        {
+          "label": "Adverts based on your interests",
+          "description": "We show you personalised products and services based on how you use the site.",
+          "advisory": "If you turn this off, you will still see adverts, but they may not be as useful to you.",
+          "channel": "advertisingInterests",
+          "lbi": false
+        }
+      ]
+    }
+  ],
+  "name": "privacySettings",
+  "scope": "FTPINK",
+  "metaSchemaVersion": "aeztGB.QgTBC2htWQOi6ohCbGzAK4dXL",
+  "id": "privacySettings/.dSYltHIQjrB5Dfm9gm4VCBWfjodx8Tf",
+  "version": ".dSYltHIQjrB5Dfm9gm4VCBWfjodx8Tf",
+  "creationDate": "2018-03-15T16:27:32.863Z"
+}

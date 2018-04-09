@@ -34,6 +34,10 @@ module.exports = {
 		unsubscribed: require('./responses/graphql-subscribed.json'),
 		trialActive: require('./responses/graphql-trial-active.json'),
 		trialCancelled: require('./responses/graphql-trial-cancelled.json'),
-		loginSuccess: require('./responses/login-api.json')
+		loginSuccess: require('./responses/login-api.json'),
+		formOfWords: {
+			reconsentB2C: require('./responses/form-of-words-api-reconsent'),
+			privacy: require('./responses/form-of-words-api-privacy')
+		}
 	}
 };

@@ -56,6 +56,16 @@ module.exports = {
 			.reply(statusCode, response);
 	},
 
+	formOfWordsApi: ({ statusCode = 200, formOfWordsId, apiHost } = {}) => {
+		if (!formOfWordsId)
+			throw new Error('getFormOfWords nock requires a formOfWordsId argument');
+		const response = statusCode === 200 ? responses.formOfWords[formOfWordsId] : '';
+		const formOfWordsNock = nock(apiHost)
+			.get(`/api/v1/FTPINK/${formOfWordsId}`)
+			.reply(statusCode, response);
+		return formOfWordsNock;
+	},
+
 	graphQlUserBySession: ({ responseType, statusCode = 200 }) => {
 		const response = getResponse(statusCode, responseType);
 		return nock("https://api.ft.com")
