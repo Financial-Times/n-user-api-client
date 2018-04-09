@@ -51,4 +51,19 @@ export function validateConsentRecord(
 	return value;
 }
 
+interface DestructuredConsent {
+	category: string;
+	channel: string;
+	consent: ConsentAPI.ConsentChannel
+}
+
+export function destructureConsentFromRecord(
+	consentRecord: ConsentAPI.ConsentCategories
+) {
+	const category = Object.keys(consentRecord)[0];
+	const channel = Object.keys(consentRecord[category])[0];
+	const consent = consentRecord[category][channel];
+	return { category, channel, consent};
+}
+
 export { consentSchema, consentRecordSchema };
