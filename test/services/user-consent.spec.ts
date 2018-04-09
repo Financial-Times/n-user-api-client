@@ -1,3 +1,4 @@
+import * as sinon from 'sinon';
 import { expect } from 'chai';
 import { mergeDeepRight } from 'ramda';
 import { consentApi } from '../nocks';
@@ -125,6 +126,13 @@ describe('UserConsent - consent API wrapper', () => {
 			expect(response).to.deep.equal(consentRecord);
 		});
 
+		it('should include version in the response if called with includeVersion = true', async () => {
+			consentApi('', 'get', 200, consentRecordResponse);
+			const response = await api.getConsentRecord(true);
+			const { version, data } = consentRecordResponse;
+			expect(response).to.deep.equal({ version, data });
+		});
+
 		it('should throw a decorated error', async () => {
 			consentApi('', 'get', 400);
 			try {
@@ -204,27 +212,69 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 	});
 
-	context('updateConsentRecord', () => {
-		const payload = {
-			newCategory: {
-				newChannel: {
-					status: true,
-					lbi: true,
-					fow: 'string',
-					source: 'string'
+	context.only('updateConsentRecord', () => {
+		let payload;
+		
+		beforeEach(() => {
+			consentApi('', 'get', 200, consentRecordResponse);
+			payload = {
+				newCategory: {
+					newChannel: {
+						status: true,
+						lbi: true,
+						fow: 'string',
+						source: 'string'
+					}
 				}
-			}
-		};
-
-		const updatedConsentRecord = mergeDeepRight(consentRecordResponse, {
-			data: payload
+			};
 		});
 
 		it('should update the consent record for a user', async () => {
-			consentApi('', 'get', 200, consentRecordResponse);
+			const updatedConsentRecord = mergeDeepRight(consentRecordResponse, {
+				data: payload
+			});
 			consentApi('', 'put', 200, updatedConsentRecord);
 			const response = await api.updateConsentRecord(payload);
 			expect(response).to.deep.equal(updatedConsentRecord.data);
+		});
+
+		it('should not overwrite existing lbi=true', async () => {
+			consentApi('', 'put', 200, {});
+			const putRequestSpy = sinon
+				.spy(UserConsent.prototype, 'request')
+				.withArgs(
+					'PUT',
+					sinon.match.any,
+					sinon.match.any,
+					sinon.match.any
+				);
+
+			// build a payload based on the existing consent record
+			payload = JSON.parse(
+				JSON.stringify(
+					consentRecordResponse.data
+				)
+			);
+			// change the status to check for a correct update
+			payload.marketing.byEmail.status = false;
+
+			// request payload should have status = false
+			const expectedPayload = JSON.stringify({
+				version: consentRecordResponse.version,
+				data: payload
+			});
+
+			// lbi = false here should not overwrite lbi for the existing record
+			payload.marketing.byEmail.lbi = false;
+
+			await api.updateConsentRecord(payload);
+			expect(putRequestSpy.calledOnce).to.equal(true);
+			expect(putRequestSpy.calledWith(
+				'PUT',
+				sinon.match.any,
+				sinon.match.any,
+				{ body: expectedPayload }
+			)).to.equal(true);
 		});
 
 		it('should throw a decorated error', async () => {

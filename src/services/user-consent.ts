@@ -20,10 +20,7 @@ export class UserConsent extends PlatformAPI {
 	private validateConsent(
 		consent: ConsentAPI.ConsentChannel
 	): ConsentAPI.ConsentChannel {
-		return ConsentValidator.validateConsent(
-			consent,
-			this.source
-		);
+		return ConsentValidator.validateConsent(consent, this.source);
 	}
 
 	private validateConsentRecord(
@@ -46,15 +43,20 @@ export class UserConsent extends PlatformAPI {
 		return data;
 	}
 
-	public async getConsentRecord(): Promise<ConsentAPI.ConsentRecord> {
+	public async getConsentRecord(
+		includeVersion: boolean = false
+	): Promise<ConsentAPI.ConsentRecord> {
 		const consents = (await this.request(
 			'GET',
 			`/${this.scope}`,
 			'Could not retrieve consent record'
 		)) as ConsentAPI.ConsentRecord;
 
-		const { data } = await (consents as any).json();
-		return data;
+		const { version, data } = await (consents as any).json();
+
+		return includeVersion
+			? { version, data }
+			: data;
 	}
 
 	public async createConsent(
@@ -118,8 +120,23 @@ export class UserConsent extends PlatformAPI {
 	public async updateConsentRecord(
 		consents: ConsentAPI.ConsentCategories
 	): Promise<ConsentAPI.ConsentRecord> {
-		let payload = this.validateConsentRecord(consents);
-		const { version, data: existingRecord } = await this.getConsentRecord();
+		const payload = this.validateConsentRecord(consents);
+
+		// get the user's consent record, including version	
+		const {
+			version,
+			data: existingRecord
+		} = await this.getConsentRecord(true);
+
+		let updatedConsentRecord = mergeDeepRight(existingRecord, payload);
+
+		for (let [category, categoryConsents] of Object.entries(existingRecord)) {
+			for (let [channel, channelConsent] of Object.entries(categoryConsents)) {
+				if (channelConsent.lbi === true) {
+					updatedConsentRecord[category][channel].lbi = true;
+				}
+			}
+		}
 
 		const updatedConsents = (await this.request(
 			'PUT',
@@ -128,7 +145,7 @@ export class UserConsent extends PlatformAPI {
 			{
 				body: JSON.stringify({
 					version,
-					data: mergeDeepRight(existingRecord, payload)
+					data: updatedConsentRecord
 				})
 			}
 		)) as ConsentAPI.ConsentRecord;
