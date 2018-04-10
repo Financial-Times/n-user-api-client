@@ -214,7 +214,7 @@ describe('UserConsent - consent API wrapper', () => {
 
 	context('updateConsentRecord', () => {
 		let payload;
-		
+
 		beforeEach(() => {
 			consentApi('', 'get', 200, consentRecordResponse);
 			payload = {

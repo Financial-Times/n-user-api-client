@@ -122,7 +122,7 @@ export class UserConsent extends PlatformAPI {
 	): Promise<ConsentAPI.ConsentRecord> {
 		const payload = this.validateConsentRecord(consents);
 
-		// get the user's consent record, including version	
+		// get the user's consent record, including version
 		const {
 			version,
 			data: existingRecord
