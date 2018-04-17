@@ -69,11 +69,10 @@ export class PlatformAPI {
 			}
 			return response;
 		} catch (error) {
-			const e = new ErrorWithData(errorMsg, {
+			const e = new ErrorWithData(errorMsg, Object.assign({
 				api: 'MEMBERSHIP_PLATFORM',
-				url: `${this.url}${path}`,
-				error
-			});
+				url: `${this.url}${path}`
+			}, error.data ? error.data : error));
 			logger.error(e);
 			throw(e);
 		}

@@ -25,6 +25,8 @@ describe('PlatformAPI wrapper', () => {
 			new PlatformAPI('/', APIMode.Mock);
 		} catch (error) {
 			expect(error).to.be.instanceof(ErrorWithData);
+			expect(error).to.haveOwnProperty('data');
+			expect(error.data).to.deep.include({ variable: 'MEMBERSHIP_API_HOST_MOCK' });
 		}
 	});
 
@@ -34,6 +36,8 @@ describe('PlatformAPI wrapper', () => {
 			new PlatformAPI('/', APIMode.Mock);
 		} catch (error) {
 			expect(error).to.be.instanceof(ErrorWithData);
+			expect(error).to.haveOwnProperty('data');
+			expect(error.data).to.deep.include({ variable: 'MEMBERSHIP_API_KEY_MOCK' });
 		}
 	});
 
@@ -61,6 +65,8 @@ describe('PlatformAPI wrapper', () => {
 		} catch (error) {
 			expect(error).to.be.instanceof(ErrorWithData);
 			expect(error.message).to.equal('Error message');
+			expect(error).to.haveOwnProperty('data');
+			expect(error.data).to.deep.include({ statusCode: 400 });
 		}
 	});
 

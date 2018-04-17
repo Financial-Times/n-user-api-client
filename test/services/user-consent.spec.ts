@@ -62,6 +62,8 @@ describe('UserConsent - consent API wrapper', () => {
 				await api.validateConsent(consent);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
+				expect(error).to.haveOwnProperty('data');
+				expect(error.data).to.deep.include({ type: 'VALIDATION' });
 			}
 		});
 
@@ -110,11 +112,13 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			consentApi(`/${test.category}/${test.channel}`, 'get', 400);
+			consentApi(`/${test.category}/${test.channel}`, 'get', 404);
 			try {
 				await api.getConsent(test.category, test.channel);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
+				expect(error).to.haveOwnProperty('data');
+				expect(error.data).to.deep.include({ statusCode: 404 });
 			}
 		});
 	});
@@ -134,11 +138,13 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			consentApi('', 'get', 400);
+			consentApi('', 'get', 404);
 			try {
 				await api.getConsentRecord();
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
+				expect(error).to.haveOwnProperty('data');
+				expect(error.data).to.deep.include({ statusCode: 404 });
 			}
 		});
 	});
@@ -160,11 +166,13 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			consentApi(`/${test.category}/${test.channel}`, 'post', 400);
+			consentApi(`/${test.category}/${test.channel}`, 'post', 404);
 			try {
 				await api.createConsent(test.category, test.channel, consentUnit);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
+				expect(error).to.haveOwnProperty('data');
+				expect(error.data).to.deep.include({ statusCode: 404 });
 			}
 		});
 	});
@@ -177,11 +185,13 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			consentApi('', 'post', 400);
+			consentApi('', 'post', 404);
 			try {
 				await api.createConsentRecord(consentRecord);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
+				expect(error).to.haveOwnProperty('data');
+				expect(error.data).to.deep.include({ statusCode: 404 });
 			}
 		});
 	});
@@ -203,11 +213,13 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			consentApi(`/${test.category}/${test.channel}`, 'patch', 400);
+			consentApi(`/${test.category}/${test.channel}`, 'patch', 404);
 			try {
 				await api.updateConsent(test.category, test.channel, consentUnit);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
+				expect(error).to.haveOwnProperty('data');
+				expect(error.data).to.deep.include({ statusCode: 404 });
 			}
 		});
 	});
@@ -278,11 +290,13 @@ describe('UserConsent - consent API wrapper', () => {
 		});
 
 		it('should throw a decorated error', async () => {
-			consentApi('', 'put', 400);
+			consentApi('', 'put', 404);
 			try {
 				await api.updateConsentRecord(payload);
 			} catch (error) {
 				expect(error).to.be.instanceof(ErrorWithData);
+				expect(error).to.haveOwnProperty('data');
+				expect(error.data).to.deep.include({ statusCode: 404 });
 			}
 		});
 	});
