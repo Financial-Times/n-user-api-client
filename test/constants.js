@@ -37,7 +37,7 @@ module.exports = {
 		loginSuccess: require('./responses/login-api.json'),
 		formOfWords: {
 			reconsentB2C: require('./responses/form-of-words-api-reconsent'),
-			privacy: require('./responses/form-of-words-api-privacy')
+			profiling: require('./responses/form-of-words-api-profiling')
 		}
 	}
 };

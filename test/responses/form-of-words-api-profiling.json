@@ -33,6 +33,7 @@
     },
     {
       "label": "Advertising",
+      "hideLabel": true,
       "category": "behaviouralAds",
       "channels": [
         {
@@ -45,10 +46,10 @@
       ]
     }
   ],
-  "name": "privacySettings",
+  "name": "profiling",
   "scope": "FTPINK",
   "metaSchemaVersion": "aeztGB.QgTBC2htWQOi6ohCbGzAK4dXL",
-  "id": "privacySettings/.dSYltHIQjrB5Dfm9gm4VCBWfjodx8Tf",
+  "id": "profiling/.dSYltHIQjrB5Dfm9gm4VCBWfjodx8Tf",
   "version": ".dSYltHIQjrB5Dfm9gm4VCBWfjodx8Tf",
   "creationDate": "2018-03-15T16:27:32.863Z"
 }
