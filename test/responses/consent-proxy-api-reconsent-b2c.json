@@ -1,0 +1,174 @@
+{
+  "formOfWords": {
+    "copy": {
+      "heading1": "We're improving how you stay up to date with the FT.",
+      "straplineHeading": "Choose how we contact you.",
+      "dataUseLink": "How we use your data"
+    },
+    "consents": [
+      {
+        "heading": "Do you want top stories & features?",
+        "label": "Get the most from The Financial Times with personalised special reports, recommended reads and latest feature announcements.",
+        "category": "enhancement",
+        "channels": [
+          {
+            "label": "By email",
+            "channel": "byEmail",
+            "lbi": false
+          },
+          {
+            "label": "By phone call",
+            "channel": "byPhoneCall",
+            "lbi": false
+          },
+          {
+            "label": "By post",
+            "channel": "byPost",
+            "lbi": false
+          }
+        ]
+      },
+      {
+        "heading": "Do you want invites & offers from the FT?",
+        "label": "Receive exclusive personalised event invitations, carefully-curated offers and promotions from The Financial Times.",
+        "category": "marketing",
+        "channels": [
+          {
+            "label": "By email",
+            "channel": "byEmail",
+            "lbi": false
+          },
+          {
+            "label": "By phone call",
+            "channel": "byPhoneCall",
+            "lbi": false
+          },
+          {
+            "label": "By post",
+            "channel": "byPost",
+            "lbi": false
+          }
+        ]
+      }
+    ],
+    "name": "reconsentB2C",
+    "scope": "FTPINK",
+    "metaSchemaVersion": "534",
+    "id": "reconsentB2C/865",
+    "version": "245",
+    "creationDate": "2018-03-26T13:58:45.000Z"
+  },
+  "viewModel": {
+    "copy": {
+      "heading1": "We're improving how you stay up to date with the FT.",
+      "straplineHeading": "Choose how we contact you.",
+      "dataUseLink": "How we use your data"
+    },
+    "consents": [
+      {
+        "heading": "Do you want top stories & features?",
+        "label": "Get the most from The Financial Times with personalised special reports, recommended reads and latest feature announcements.",
+        "category": "enhancement",
+        "channels": [
+          {
+            "label": "By email",
+            "channel": "byEmail",
+            "lbi": false,
+            "checkedYes": false,
+            "checkedNo": false
+          },
+          {
+            "label": "By phone call",
+            "channel": "byPhoneCall",
+            "lbi": false,
+            "checkedYes": true,
+            "checkedNo": false
+          },
+          {
+            "label": "By post",
+            "channel": "byPost",
+            "lbi": false,
+            "checkedYes": false,
+            "checkedNo": true
+          }
+        ]
+      },
+      {
+        "heading": "Do you want invites & offers from the FT?",
+        "label": "Receive exclusive personalised event invitations, carefully-curated offers and promotions from The Financial Times.",
+        "category": "marketing",
+        "channels": [
+          {
+            "label": "By email",
+            "channel": "byEmail",
+            "lbi": false,
+            "checkedYes": true,
+            "checkedNo": false
+          },
+          {
+            "label": "By phone call",
+            "channel": "byPhoneCall",
+            "lbi": false,
+            "checkedYes": false,
+            "checkedNo": true
+          },
+          {
+            "label": "By post",
+            "channel": "byPost",
+            "lbi": false,
+            "checkedYes": false,
+            "checkedNo": true
+          }
+        ]
+      }
+    ],
+    "name": "reconsentB2C",
+    "scope": "FTPINK",
+    "metaSchemaVersion": "123",
+    "id": "reconsentB2C/234",
+    "version": "546",
+    "creationDate": "2018-03-26T13:58:45.000Z",
+    "source": "next-consent-proxy"
+  },
+  "consentRecord": {
+    "marketing": {
+      "byPost": {
+        "status": false,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T08:58:55Z",
+        "fow": "consentPreferences/245"
+      },
+      "byPhoneCall": {
+        "status": false,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T10:20:51Z",
+        "fow": "consentPreferences/756"
+      },
+      "byEmail": {
+        "status": true,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T10:12:36Z",
+        "fow": "consentPreferences/964"
+      }
+    },
+    "enhancement": {
+      "byPost": {
+        "status": false,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T09:32:29Z",
+        "fow": "consentPreferences/365"
+      },
+      "byPhoneCall": {
+        "status": true,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T09:31:48Z",
+        "fow": "consentPreferences/243"
+      }
+    }
+  }
+}

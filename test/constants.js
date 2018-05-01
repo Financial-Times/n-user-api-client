@@ -38,6 +38,10 @@ module.exports = {
 		formOfWords: {
 			reconsentB2C: require('./responses/form-of-words-api-reconsent'),
 			profiling: require('./responses/form-of-words-api-profiling')
+		},
+		consentProxy: {
+			reconsentB2C: require('./responses/consent-proxy-api-reconsent-b2c.json'),
+			profiling: require('./responses/consent-proxy-api-profiling.json')
 		}
 	}
 };

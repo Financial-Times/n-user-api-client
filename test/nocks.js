@@ -58,12 +58,21 @@ module.exports = {
 
 	formOfWordsApi: ({ statusCode = 200, formOfWordsId, apiHost } = {}) => {
 		if (!formOfWordsId)
-			throw new Error('getFormOfWords nock requires a formOfWordsId argument');
+			throw new Error('formOfWordsApi nock requires a formOfWordsId argument');
 		const response = statusCode === 200 ? responses.formOfWords[formOfWordsId] : '';
 		const formOfWordsNock = nock(apiHost)
 			.get(`/api/v1/FTPINK/${formOfWordsId}`)
 			.reply(statusCode, response);
 		return formOfWordsNock;
+	},
+
+	consentProxyApi: ({ statusCode = 200, userId, formOfWordsId, apiHost}) => {
+		if (!formOfWordsId)
+			throw new Error('consentProxyApi nock requires a formOfWordsId argument');
+		const response = statusCode === 200 ? responses.consentProxy[formOfWordsId] : '';
+		return nock(apiHost)
+			.get(`/__consent/view-model/FTPINK/${userId}/${formOfWordsId}`)
+			.reply(statusCode, response);
 	},
 
 	graphQlUserBySession: ({ responseType, statusCode = 200 }) => {

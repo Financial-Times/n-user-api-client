@@ -1,0 +1,156 @@
+{
+  "formOfWords": {
+    "copy": {
+      "heading1": "Privacy details",
+      "straplineSmall": "We improve your experience of the FT by personalising parts of our site and app with the info you give us and what we learn about you. You can control this info, but this may affect what you see."
+    },
+    "consents": [
+      {
+        "label": "Personalised recommendations",
+        "link": "http://www.ft.com/TBC",
+        "category": "recommendedContent",
+        "channels": [
+          {
+            "label": "We help you find new content to read by showing you articles you may be interested in.",
+            "advisory": "<strong>If you turn this off</strong>, you may still see 'recommendations' but these won't be personalised to you.",
+            "channel": "onsite",
+            "lbi": false
+          }
+        ]
+      },
+      {
+        "label": "Personalised adverts",
+        "link": "http://www.ft.com/TBC",
+        "category": "demographicAds",
+        "channels": [
+          {
+            "label": "We help you see adverts with products and services that are relevant to you, based on your characteristics, your online activity and your interests.",
+            "advisory": "<p><strong>If you turn this off</strong>, you will still see the same number of adverts but they may be less relevant.</p><p>You may continue to see adverts that are targeted to you based on other information.</p>",
+            "channel": "onsite",
+            "lbi": false
+          }
+        ]
+      },
+      {
+        "label": "Adverts tailored to you",
+        "link": "http://www.ft.com/TBC",
+        "category": "behaviouralAds",
+        "channels": [
+          {
+            "label": "We help you see adverts with products and services that are tailored to you, based on the information you gave us when you signed up.",
+            "advisory": "<p><strong>If you turn this off</strong> you will still see the same number of adverts but they may be less relevant.</p><p>You may continue to see adverts that are targeted to you based on other information.</p>",
+            "channel": "onsite",
+            "lbi": false
+          }
+        ]
+      }
+    ],
+    "name": "profiling",
+    "scope": "FTPINK",
+    "metaSchemaVersion": "545.86",
+    "id": "profiling/345",
+    "version": "864",
+    "creationDate": "2018-04-16T08:52:43.000Z"
+  },
+  "viewModel": {
+    "copy": {
+      "heading1": "Privacy details",
+      "straplineSmall": "We improve your experience of the FT by personalising parts of our site and app with the info you give us and what we learn about you. You can control this info, but this may affect what you see."
+    },
+    "consents": [
+      {
+        "label": "Personalised recommendations",
+        "link": "http://www.ft.com/TBC",
+        "category": "recommendedContent",
+        "channels": [
+          {
+            "label": "We help you find new content to read by showing you articles you may be interested in.",
+            "advisory": "<strong>If you turn this off</strong>, you may still see 'recommendations' but these won't be personalised to you.",
+            "channel": "onsite",
+            "lbi": false,
+            "checkedYes": false,
+            "checkedNo": false
+          }
+        ]
+      },
+      {
+        "label": "Personalised adverts",
+        "link": "http://www.ft.com/TBC",
+        "category": "demographicAds",
+        "channels": [
+          {
+            "label": "We help you see adverts with products and services that are relevant to you, based on your characteristics, your online activity and your interests.",
+            "advisory": "<p><strong>If you turn this off</strong>, you will still see the same number of adverts but they may be less relevant.</p><p>You may continue to see adverts that are targeted to you based on other information.</p>",
+            "channel": "onsite",
+            "lbi": false,
+            "checkedYes": false,
+            "checkedNo": false
+          }
+        ]
+      },
+      {
+        "label": "Adverts tailored to you",
+        "link": "http://www.ft.com/TBC",
+        "category": "behaviouralAds",
+        "channels": [
+          {
+            "label": "We help you see adverts with products and services that are tailored to you, based on the information you gave us when you signed up.",
+            "advisory": "<p><strong>If you turn this off</strong> you will still see the same number of adverts but they may be less relevant.</p><p>You may continue to see adverts that are targeted to you based on other information.</p>",
+            "channel": "onsite",
+            "lbi": false,
+            "checkedYes": false,
+            "checkedNo": false
+          }
+        ]
+      }
+    ],
+    "name": "profiling",
+    "scope": "FTPINK",
+    "metaSchemaVersion": "456.tJ3zHjwTXv1",
+    "id": "profiling/567",
+    "version": "644",
+    "creationDate": "2018-04-16T08:52:43.000Z",
+    "source": "next-consent-proxy"
+  },
+  "consentRecord": {
+    "marketing": {
+      "byPost": {
+        "status": false,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T08:58:55Z",
+        "fow": "consentPreferences/123"
+      },
+      "byPhoneCall": {
+        "status": false,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T10:20:51Z",
+        "fow": "consentPreferences/789"
+      },
+      "byEmail": {
+        "status": true,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T10:12:36Z",
+        "fow": "consentPreferences/345"
+      }
+    },
+    "enhancement": {
+      "byPost": {
+        "status": false,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T09:32:29Z",
+        "fow": "consentPreferences/769"
+      },
+      "byPhoneCall": {
+        "status": true,
+        "source": "next-myft-page",
+        "lbi": false,
+        "lastModified": "2018-04-26T09:31:48Z",
+        "fow": "consentPreferences/243"
+      }
+    }
+  }
+}
