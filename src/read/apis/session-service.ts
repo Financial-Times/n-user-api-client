@@ -2,17 +2,21 @@ import 'isomorphic-fetch';
 import { apiErrorType, ErrorWithData } from '../../utils/error';
 import { isSessionStale } from '../transforms/session-freshness';
 
-export const getSessionData = async ({ session, apiHost, apiKey }) => {
+export const getSessionData = async (
+	{ session, apiHost, apiKey },
+	requestOptions = {}
+) => {
 	const url = `${apiHost}/sessions/s/${session}`;
 	const errorMsg = 'Could not get session data';
-	const options = {
+	const options = Object.assign({
 		timeout: 10000,
 		headers: {
 			'Content-Type': 'application/json',
 			'X-Api-Key': apiKey
 		},
 		method: 'GET'
-	};
+	}, requestOptions);
+
 	const response = await fetch(url, options);
 	if (response.ok) {
 		const body = await response.json();

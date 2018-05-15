@@ -7,7 +7,9 @@ import { ErrorWithData, errorTypes } from '../utils/error';
 import { getSessionData } from './apis/session-service';
 import { validateOptions } from '../utils/validate';
 
-export const getUserBySession = async (session: string): Promise<GraphQlUserApiResponse> => {
+export const getUserBySession = async (
+	session: string
+): Promise<GraphQlUserApiResponse> => {
 	const defaultErrorMessage = 'Unable to retrieve user';
 	const graphQlQuery = 'mma-user-by-session';
 	try {
@@ -29,9 +31,7 @@ export const getUserBySession = async (session: string): Promise<GraphQlUserApiR
 		const transformed = readTransforms(user);
 		return transformed;
 	} catch (error) {
-		const errorMsg = error.data
-			? error.message
-			: defaultErrorMessage;
+		const errorMsg = error.data ? error.message : defaultErrorMessage;
 
 		const e = new ErrorWithData(errorMsg, {
 			api: 'MEMBERSHIP_GRAPHQL',
@@ -43,7 +43,10 @@ export const getUserBySession = async (session: string): Promise<GraphQlUserApiR
 	}
 };
 
-export const getUserIdAndSessionData = async (opts): Promise<any> => {
+export const getUserIdAndSessionData = async (
+	opts,
+	requestOptions = {}
+): Promise<any> => {
 	validateOptions(opts, null, ['session', 'apiHost', 'apiKey']);
-	return await getSessionData(opts);
+	return await getSessionData(opts, requestOptions);
 };
