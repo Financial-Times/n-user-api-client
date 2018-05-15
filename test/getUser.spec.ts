@@ -1,3 +1,5 @@
+import 'isomorphic-fetch';
+import * as sinon from 'sinon';
 import { expect } from 'chai';
 import { getUserBySession, getUserIdAndSessionData } from '../src/read/getUser';
 import { graphQlUserBySession, userIdBySession } from './nocks';
@@ -5,6 +7,18 @@ import { graphQlUserBySession, userIdBySession } from './nocks';
 describe('getUser', () => {
 	const session = '123';
 	let responseType;
+
+	let sandbox;
+	let fetchSpy;
+
+	beforeEach(() => {
+		sandbox = sinon.createSandbox();
+		fetchSpy = sandbox.spy(global, 'fetch');
+	});
+
+	afterEach(() => {
+		sandbox.restore();
+	});
 
 	describe('getUserBySession', () => {
 		it('resolves with a transformed user object when successful', async () => {
@@ -99,6 +113,12 @@ describe('getUser', () => {
 					expect(err.data.statusCode).to.equal(403);
 					expect(err.message).to.equal('Could not get session data');
 				});
+		});
+
+		it('allows overriding the underlying fetch request options', async () => {
+			userIdBySession({session: params.session});
+			const sessionData = await getUserIdAndSessionData(params, { timeout: 1 });
+			expect(fetchSpy.calledWith(sinon.match.any, sinon.match({ timeout: 1 }))).to.be.true;
 		});
 	});
 
