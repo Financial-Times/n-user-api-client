@@ -29,7 +29,8 @@ module.exports = {
 		statusCode = 200,
 		session,
 		isStale = false,
-		isValidUserId = true
+		isValidUserId = true,
+		apiHost = 'https://api.ft.com'
 	} = {}) => {
 		if (!session)
 			throw new Error("userIdBySession nock requires a session argument");
@@ -38,7 +39,7 @@ module.exports = {
 			isStale,
 			isValidUserId
 		});
-		return nock("https://api.ft.com")
+		return nock(apiHost)
 			.get(`/sessions/s/${session}`)
 			.query(true)
 			.reply(statusCode, response);
