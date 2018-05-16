@@ -178,3 +178,7 @@ The module is written in typescript - compile to the dist/ folder with:
 ```sh
 make build
 ```
+
+## Releasing
+
+To release a new version of the client, draft a new release in Github. There's no need to update package.json.
