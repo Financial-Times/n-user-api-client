@@ -1,6 +1,9 @@
 import 'isomorphic-fetch';
+import { Agent } from 'https';
 import { apiErrorType, ErrorWithData } from '../../utils/error';
 import { isSessionStale } from '../transforms/session-freshness';
+
+const agent = new Agent({ keepAlive: true });
 
 export const getSessionData = async (
 	{ session, apiHost, apiKey },
@@ -9,12 +12,13 @@ export const getSessionData = async (
 	const url = `${apiHost}/sessions/s/${session}`;
 	const errorMsg = 'Could not get session data';
 	const options = Object.assign({
-		timeout: 10000,
+		timeout: 3000,
 		headers: {
 			'Content-Type': 'application/json',
 			'X-Api-Key': apiKey
 		},
-		method: 'GET'
+		method: 'GET',
+		agent
 	}, requestOptions);
 
 	const response = await fetch(url, options);
