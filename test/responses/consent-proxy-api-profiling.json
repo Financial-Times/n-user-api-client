@@ -99,7 +99,7 @@
             "channel": "onsite",
             "lbi": false,
             "checkedYes": false,
-            "checkedNo": false
+            "checkedNo": true
           }
         ]
       }

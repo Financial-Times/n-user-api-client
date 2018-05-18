@@ -70,9 +70,12 @@ module.exports = {
 	consentProxyApi: ({ statusCode = 200, userId, formOfWordsId, apiHost}) => {
 		if (!formOfWordsId)
 			throw new Error('consentProxyApi nock requires a formOfWordsId argument');
+		const endpoint = userId
+			? `/__consent/view-model/FTPINK/${userId}/${formOfWordsId}`
+			: `/__consent/anon-view-model/FTPINK/${formOfWordsId}`;
 		const response = statusCode === 200 ? responses.consentProxy[formOfWordsId] : '';
 		return nock(apiHost)
-			.get(`/__consent/view-model/FTPINK/${userId}/${formOfWordsId}`)
+			.get(endpoint)
 			.reply(statusCode, response);
 	},
 
