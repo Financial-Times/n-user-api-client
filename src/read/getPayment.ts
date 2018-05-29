@@ -10,7 +10,7 @@ import { getActivePaymentMethod } from './transforms';
 
 export const getPaymentDetailsBySessoin = async (
 	session: string
-): Promise<GraphQlUserApiResponse> => {
+): Promise<Object|null> => {
 	const defaultErrorMessage = 'Unable to retrieve payment details';
 	const graphQlQuery = 'mma-payment-by-session';
 	try {

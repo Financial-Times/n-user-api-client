@@ -87,6 +87,14 @@ module.exports = {
 			.reply(statusCode, response);
 	},
 
+	graphQlPaymentBySession: ({ responseType, statusCode = 200 }) => {
+		const response = getResponse(statusCode, responseType);
+		return nock('https://api.ft.com')
+			.get('/memb-query/api/mma-payment-by-session')
+			.query(true)
+			.reply(statusCode, response);
+	},
+
 	authApi: ({ statusCode = 302, expiredSession = false } = {}) => {
 		const result = expiredSession
 			? "#error=invalid_scope&error_description=Cannot%20acquire%20valid%20scope."
