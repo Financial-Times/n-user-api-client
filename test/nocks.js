@@ -120,7 +120,7 @@ module.exports = {
 	userPasswordApi: ({ statusCode = 200, userId } = {}) => {
 		const response = statusCode === 200 ? {} : responses.genericError;
 		return nock("https://api.ft.com")
-			.post(`/users/${userId}/credentials/change-password`)
+			.post(`/idm/v1/users/${userId}/credentials/change-password`)
 			.reply(statusCode, response);
 	},
 
@@ -128,7 +128,7 @@ module.exports = {
 		const response =
 			statusCode === 200 ? responses.loginSuccess : responses.genericError;
 		let loginApiNock = nock("https://api.ft.com")
-			.post("/login", body => (loginApiNock.requestBody = body))
+			.post("/idm/v1/reauthenticate", body => (loginApiNock.requestBody = body))
 			.reply(statusCode, response);
 		return loginApiNock;
 	}

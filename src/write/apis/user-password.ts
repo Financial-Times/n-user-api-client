@@ -8,10 +8,11 @@ export const updateUserPasswordApi = async ({
 	passwordData,
 	authToken,
 	apiHost,
-	apiKey
+	apiKey,
+	appName
 }) => {
 	const errorMsg = 'Could not change user password';
-	const url = `${apiHost}/users/${userId}/credentials/change-password`;
+	const url = `${apiHost}/idm/v1/users/${userId}/credentials/change-password`;
 	const body = {
 		password: passwordData.newPassword,
 		oldPassword: passwordData.oldPassword,
@@ -22,7 +23,8 @@ export const updateUserPasswordApi = async ({
 		headers: {
 			'Content-Type': 'application/json',
 			'X-Api-Key': apiKey,
-			Authorization: `Bearer ${authToken}`
+			Authorization: `Bearer ${authToken}`,
+			'User-Agent': appName
 		},
 		method: 'POST',
 		body: JSON.stringify(body)

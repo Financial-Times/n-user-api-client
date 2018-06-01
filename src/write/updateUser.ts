@@ -56,7 +56,11 @@ export const changeUserPassword = async (
 		apiKey,
 		apiClientId,
 		userId,
-		passwordData
+		passwordData,
+		remoteIp,
+		countryCode,
+		userAgent,
+		appName
 	} = opts;
 	const [userApiResponse, authToken] = await getUserAndAuthToken({
 		session,
@@ -68,13 +72,18 @@ export const changeUserPassword = async (
 		passwordData,
 		authToken,
 		apiHost,
-		apiKey
+		apiKey,
+		appName
 	});
 	return await userLoginApi({
 		email: userApiResponse.profile.email,
 		password,
+		remoteIp,
+		countryCode,
+		userAgent,
 		apiHost,
-		apiKey
+		apiKey,
+		appName
 	});
 };
 

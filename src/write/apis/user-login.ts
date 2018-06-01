@@ -3,9 +3,9 @@ import 'isomorphic-fetch';
 import { apiErrorType, ErrorWithData } from '../../utils/error';
 import { logger } from '../../utils/logger';
 
-export const userLoginApi = async ({ email, password, apiHost, apiKey }) => {
+export const userLoginApi = async ({ email, password, remoteIp, countryCode, userAgent, apiHost, apiKey, appName }) => {
 	const errorMsg = 'Could not log user in';
-	const url = `${apiHost}/login`;
+	const url = `${apiHost}/idm/v1/reauthenticate`;
 	try {
 		if (!password) {
 			throw new Error('password not supplied to userLoginApi');
@@ -13,13 +13,20 @@ export const userLoginApi = async ({ email, password, apiHost, apiKey }) => {
 		const body = {
 			email,
 			password,
-			rememberMe: true
+			rememberMe: true,
+			context: {
+				'remoteIp': remoteIp,
+				'countryCode': countryCode,
+				'userAgent': userAgent,
+				'platform': 'n-user-api-client'
+			}
 		};
 		const options = {
 			timeout: 10000,
 			headers: {
 				'Content-Type': 'application/json',
-				'X-Api-Key': apiKey
+				'X-Api-Key': apiKey,
+				'User-Agent': appName
 			},
 			method: 'POST',
 			body: JSON.stringify(body)

@@ -51,11 +51,19 @@ export interface UpdateUserOptions {
 	userId: string;
 	passwordData?: any;
 	userUpdate?: any;
+	remoteIp: string;
+	countryCode: string;
+	userAgent: string;
+	appName: string;
 }
 
 export interface LoginUserOptions {
 	email: string;
 	password: string;
+    remoteIp: string;
+    countryCode: string;
+    userAgent: string;
 	apiHost: string;
 	apiKey: string;
+    appName: string;
 }

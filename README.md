@@ -73,7 +73,15 @@ email (string)
 
 password (string)
 
+remoteIp (string) - the IP of the user
+
+countryCode (string) - the country the user is located in
+
+userAgent (string) - the User-Agent header of the user
+
 apiHost, apiKey - the consumer app should pass these in, based on Vault env vars
+
+appName - the name of the app using `n-user-api-client`
 
 
 #### Return value
@@ -108,6 +116,8 @@ apiHost, apiKey, apiClientId - the consumer app should pass these in, based on V
 userId (string)
 
 passwordData (object) - in [this format](https://developer.ft.com/portal/docs-membership-platform-api-user-api-post-users-userid-credentials-change-password)
+
+appName - the name of the app using `n-user-api-client`
 
 #### Return value
 
