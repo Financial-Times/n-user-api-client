@@ -8,9 +8,10 @@ import { GraphQlUserApiResponse } from '../types';
 
 import { getActivePaymentMethod } from './transforms';
 
-export const getPaymentDetailsBySessoin = async (
-	session: string
-): Promise<Object|null> => {
+export const getPaymentDetailsBySession = async (
+	session: string,
+	option?: object,
+): Promise<object|null> => {
 	const defaultErrorMessage = 'Unable to retrieve payment details';
 	const graphQlQuery = 'mma-payment-by-session';
 	try {
@@ -20,7 +21,7 @@ export const getPaymentDetailsBySessoin = async (
 				type: errorTypes.VALIDATION
 			});
 		}
-		const res = await canned(graphQlQuery, { session }, { timeout: 10000 });
+		const res = await canned(graphQlQuery, { session }, { ...option, timeout: 10000 });
 		const user = R.path(['data', 'user'], res);
 		if (!res._ok || !user) {
 			throw new ErrorWithData(defaultErrorMessage, {

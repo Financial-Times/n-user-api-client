@@ -6,7 +6,7 @@ describe('Public API', () => {
 	const publicFunctions = [
 		'getUserBySession',
 		'getUserIdAndSessionData',
-		'getPaymentDetailsBySessoin',
+		'getPaymentDetailsBySession',
 		'updateUserProfile',
 		'changeUserPassword',
 		'loginUser'
