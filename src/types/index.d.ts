@@ -51,6 +51,7 @@ export interface UpdateUserOptions {
 	userId: string;
 	passwordData?: any;
 	userUpdate?: any;
+	useTestUserApi?: boolean;
 }
 
 export interface LoginUserOptions {

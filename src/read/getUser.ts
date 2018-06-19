@@ -9,7 +9,7 @@ import { validateOptions } from '../utils/validate';
 
 export const getUserBySession = async (
 	session: string,
-	testMode = false
+	testMode?: boolean
 ): Promise<GraphQlUserApiResponse> => {
 	const defaultErrorMessage = 'Unable to retrieve user';
 	const graphQlQuery = 'mma-user-by-session';
