@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
 import { expect } from 'chai';
-import { getPaymentDetailsBySessoin } from '../src/read/getPayment';
+import { getPaymentDetailsBySession } from '../src/read/getPayment';
 import { graphQlPaymentBySession } from './nocks';
 
 describe('getPayment', () => {
@@ -19,28 +19,29 @@ describe('getPayment', () => {
 		sandbox.restore();
 	});
 
-	describe('getPaymentDetailsBySessoin', () => {
-		it('resolves with a transformed user object when successful', async () => {
+	describe('getPaymentDetailsBySession', () => {
+		it('resolves with a paymentMethod object when successful', async () => {
 			graphQlPaymentBySession({ responseType: 'subscribed' });
-			const paymentDetails = await getPaymentDetailsBySessoin(session);
-			expect(paymentDetails.type).to.equal('Visa');
+			const paymentMethod = await getPaymentDetailsBySession(session);
+			expect(paymentMethod.type).to.equal('CREDITCARD');
+			expect(paymentMethod.creditCard.type).to.equal('Visa');
 		});
 
 		it('resolves with null when successful but user has a null billingAccount', async () => {
 			graphQlPaymentBySession({ responseType: 'unsubscribed' });
-			const paymentDetails = await getPaymentDetailsBySessoin(session);
+			const paymentDetails = await getPaymentDetailsBySession(session);
 			expect(paymentDetails).to.be.null;
 		});
 
 		it('handles exception thrown within canned query', async () => {
 			graphQlPaymentBySession({ responseType, statusCode: 500 });
-			return getPaymentDetailsBySessoin(session)
+			return getPaymentDetailsBySession(session)
 				.catch(err =>
 					expect(err.message).to.equal('Unable to retrieve payment details'));
 		});
 
 		it('throws if no session supplied', done => {
-			getPaymentDetailsBySessoin(undefined)
+			getPaymentDetailsBySession(undefined)
 				.catch(err => {
 					expect(err.message).to.equal('Session not supplied');
 					done();

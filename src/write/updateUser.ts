@@ -22,10 +22,11 @@ const KEY_PROPERTIES = [
 const getUserAndAuthToken = ({
 	session,
 	apiHost,
-	apiClientId
+	apiClientId,
+	useTestUserApi
 }): Promise<[any, any]> => {
 	return Promise.all([
-		getUserBySession(session),
+		getUserBySession(session, useTestUserApi),
 		getAuthToken({ session, apiHost, apiClientId })
 	]);
 };
@@ -60,12 +61,14 @@ export const changeUserPassword = async (
 		remoteIp,
 		countryCode,
 		userAgent,
-		appName
+		appName,
+		useTestUserApi
 	} = opts;
 	const [userApiResponse, authToken] = await getUserAndAuthToken({
 		session,
 		apiHost,
-		apiClientId
+		apiClientId,
+		useTestUserApi
 	});
 	const password = await updateUserPasswordApi({
 		userId,
@@ -95,12 +98,14 @@ export const updateUserProfile = async (opts: UpdateUserOptions): Promise<any> =
 		apiKey,
 		apiClientId,
 		userId,
-		userUpdate
+		userUpdate,
+		useTestUserApi
 	} = opts;
 	const [userApiResponse, authToken] = await getUserAndAuthToken({
 		session,
 		apiHost,
-		apiClientId
+		apiClientId,
+		useTestUserApi
 	});
 	const updateMergedWithFetchedUser = mergeUserUpdateWithFetchedUser({
 		userUpdate,

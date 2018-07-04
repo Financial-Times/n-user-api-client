@@ -55,15 +55,16 @@ export interface UpdateUserOptions {
 	countryCode: string;
 	userAgent: string;
 	appName: string;
+	useTestUserApi?: boolean;
 }
 
 export interface LoginUserOptions {
 	email: string;
 	password: string;
-    remoteIp: string;
-    countryCode: string;
-    userAgent: string;
+	remoteIp: string;
+	countryCode: string;
+	userAgent: string;
 	apiHost: string;
 	apiKey: string;
-    appName: string;
+	appName: string;
 }

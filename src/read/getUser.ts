@@ -8,7 +8,8 @@ import { getSessionData } from './apis/session-service';
 import { validateOptions } from '../utils/validate';
 
 export const getUserBySession = async (
-	session: string
+	session: string,
+	testMode?: boolean
 ): Promise<GraphQlUserApiResponse> => {
 	const defaultErrorMessage = 'Unable to retrieve user';
 	const graphQlQuery = 'mma-user-by-session';
@@ -19,7 +20,7 @@ export const getUserBySession = async (
 				type: errorTypes.VALIDATION
 			});
 		}
-		const res = await canned(graphQlQuery, { session }, { timeout: 10000 });
+		const res = await canned(graphQlQuery, { session }, { timeout: 10000, testMode });
 		const user = R.path(['data', 'user'], res);
 		if (!res._ok || !user) {
 			throw new ErrorWithData(defaultErrorMessage, {
