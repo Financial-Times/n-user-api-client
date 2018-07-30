@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
-import { ConsentAPI } from '../../types/consent-api';
+import { ConsentAPI } from '../types/consent-api';
 import { consentSchema, consentRecordSchema } from './schema';
 
-import { errorTypes, ErrorWithData } from '../../utils/error';
+import { errorTypes, ErrorWithData } from '../utils/error';
 
 const validationError = (error: Joi.ValidationError) =>
 	new ErrorWithData('Payload validation error', {
@@ -66,4 +66,4 @@ export function destructureConsentFromRecord(
 	return { category, channel, consent};
 }
 
-export { consentSchema, consentRecordSchema };
+export const ConsentValidator = { consentSchema, consentRecordSchema };

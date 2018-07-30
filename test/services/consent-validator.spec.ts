@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import * as ConsentValidator from '../../src/services/validation/consent-api';
+import * as ConsentValidator from '../../src/validation/consent-api';
 
 import { ErrorWithData } from '../../src/utils/error';
 import { test } from '../constants';
