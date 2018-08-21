@@ -1,0 +1,89 @@
+{
+  "data": {
+    "user": {
+      "subscriber": {
+        "status": {
+          "subscriptions": [
+            {
+              "trialSubscription": false,
+              "trialPrice": null,
+              "trialEndDate": null,
+              "term": "P1Y",
+              "status": "Active",
+              "startDate": "2018-02-19T00:00:00.000Z",
+              "renewalDate": "2019-02-19T00:00:00.000Z",
+              "reference": "subs",
+              "productName": "Standard FT.com",
+              "productCodes": [
+                "P1"
+              ],
+              "price": {
+                "value": "356.00",
+                "symbol": "£",
+                "nativeSymbol": "£",
+                "currency": "GBP"
+              },
+              "fulfilmentOption": null,
+              "endDate": null,
+              "active": true
+            }
+          ],
+          "lapsedSubscriber": false,
+          "currentTriallist": false,
+          "currentSubscriber": true
+        },
+        "billingAccount": {
+          "paymentMethod": {
+            "type": "CREDITCARD",
+            "paypal": null,
+            "directDebit": null,
+            "creditCard": {
+              "type": "Visa",
+              "maskedNumber": "************1111",
+              "expirationYear": "2020",
+              "expirationMonth": "1"
+            }
+          },
+          "currencyCode": "GBP"
+        }
+      },
+      "profile": {
+        "primaryTelephone": "123456789",
+        "name": {
+          "title": "Mr",
+          "last": "Doe",
+          "first": "John"
+        },
+        "marketing": {
+          "byPost": true,
+          "byEmail": true
+        },
+        "homeAddress": {
+          "townCity": null,
+          "state": null,
+          "postcode": null,
+          "line2": null,
+          "line1": null,
+          "country": "GBR"
+        },
+        "email": "1519047989791@ft.com",
+        "demographics": {
+          "responsibility": {
+            "description": "Broker/trader",
+            "code": "RES"
+          },
+          "position": {
+            "description": "Analyst",
+            "code": "BU"
+          },
+          "industry": {
+            "description": "Automobiles",
+            "code": "CAR"
+          }
+        },
+        "b2bProfile": null
+      },
+      "id": "123"
+    }
+  }
+}

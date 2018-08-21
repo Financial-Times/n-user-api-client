@@ -31,6 +31,7 @@ module.exports = {
 		},
 		noSubscription: require('./responses/graphql-no-subscription.json'),
 		subscribed: require('./responses/graphql-subscribed.json'),
+		subscribedStandard: require('./responses/graphql-subscribed-standard.json'),
 		unsubscribed: require('./responses/graphql-unsubscribed.json'),
 		trialActive: require('./responses/graphql-trial-active.json'),
 		trialCancelled: require('./responses/graphql-trial-cancelled.json'),
