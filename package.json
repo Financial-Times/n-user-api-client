@@ -40,7 +40,7 @@
     "typescript": "^3.9.6"
   },
   "engines": {
-    "node": "^8.9.4"
+    "node": "^14.0.0"
   },
   "dependencies": {
     "@financial-times/n-mask-logger": "^2.1.0",
