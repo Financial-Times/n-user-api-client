@@ -31,7 +31,7 @@
   "devDependencies": {
     "@financial-times/n-gage": "8.3.2",
     "@types/chai": "^4.1.3",
-    "@types/joi": "^13.0.8",
+    "@types/joi": "10.6.5",
     "@types/mocha": "^5.2.0",
     "@types/nock": "^9.1.3",
     "@types/node": "16.11.7",
@@ -39,6 +39,7 @@
     "@types/sinon": "^4.3.3",
     "chai": "^4.1.2",
     "check-engines": "1.5.0",
+    "joi": "10.6.0",
     "mocha": "^5.1.1",
     "nock": "^9.2.6",
     "sinon": "^5.0.7",
@@ -51,7 +52,6 @@
     "@financial-times/n-mask-logger": "6.0.0",
     "@financial-times/n-memb-gql-client": "2.2.3",
     "isomorphic-fetch": "^3.0.0",
-    "joi": "^13.3.0",
     "querystring": "^0.2.0",
     "ramda": "^0.25.0",
     "url": "^0.11.0"

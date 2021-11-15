@@ -23,8 +23,8 @@ describe('getPayment', () => {
 		it('resolves with a paymentMethod object when successful', async () => {
 			graphQlPaymentBySession({ responseType: 'subscribed' });
 			const paymentMethod = await getPaymentDetailsBySession(session);
-			expect(paymentMethod.type).to.equal('CREDITCARD');
-			expect(paymentMethod.creditCard.type).to.equal('Visa');
+			expect(paymentMethod?.type).to.equal('CREDITCARD');
+			expect(paymentMethod?.creditCard?.type).to.equal('Visa');
 		});
 
 		it('resolves with null when successful but user has a null billingAccount', async () => {

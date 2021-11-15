@@ -1,6 +1,10 @@
 import 'isomorphic-fetch';
 
-import { apiErrorType, ErrorWithData } from '../../utils/error';
+import {
+	isErrorWithData,
+	apiErrorType,
+	ErrorWithData,
+} from '../../utils/error';
 import { logger } from '../../utils/logger';
 
 export const updateUserPasswordApi = async ({
@@ -9,14 +13,14 @@ export const updateUserPasswordApi = async ({
 	authToken,
 	apiHost,
 	apiKey,
-	appName
+	appName,
 }) => {
 	const errorMsg = 'Could not change user password';
 	const url = `${apiHost}/idm/v1/users/${userId}/credentials/change-password`;
 	const body = {
 		password: passwordData.newPassword,
 		oldPassword: passwordData.oldPassword,
-		reasonForChange: 'owner-requested'
+		reasonForChange: 'owner-requested',
 	};
 	const options = {
 		timeout: 10000,
@@ -24,10 +28,10 @@ export const updateUserPasswordApi = async ({
 			'Content-Type': 'application/json',
 			'X-Api-Key': apiKey,
 			Authorization: `Bearer ${authToken}`,
-			'User-Agent': appName
+			'User-Agent': appName,
 		},
 		method: 'POST',
-		body: JSON.stringify(body)
+		body: JSON.stringify(body),
 	} as RequestInit;
 
 	try {
@@ -37,13 +41,17 @@ export const updateUserPasswordApi = async ({
 		}
 		throw new ErrorWithData(errorMsg, {
 			statusCode: response.status,
-			type: apiErrorType(response.status)
+			type: apiErrorType(response.status),
 		});
 	} catch (error) {
+		if (!isErrorWithData(error)) {
+			throw error;
+		}
+
 		const statusCode = error.data ? error.data.statusCode : 500;
 		const e = new ErrorWithData(errorMsg, {
 			url,
-			error
+			error,
 		});
 		logger.error(e);
 		throw e;

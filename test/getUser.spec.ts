@@ -25,7 +25,7 @@ describe('getUser', () => {
 		it('resolves with a transformed user object when successful', async () => {
 			graphQlUserBySession({ responseType: 'subscribed' });
 			const user = await getUserBySession(session);
-			expect(user.profile.firstName).to.equal('John');
+			expect(user?.profile?.firstName).to.equal('John');
 		});
 
 		it('handles exception thrown within canned query', async () => {
