@@ -2,26 +2,26 @@
   "name": "@financial-times/n-user-api-client",
   "version": "0.0.0",
   "description": "Client to access User API on the FT Membership Platform",
+  "author": "",
+  "license": "ISC",
   "main": "dist/main.js",
-  "scripts": {
-    "test": "make test",
-    "precommit": "node_modules/.bin/secret-squirrel",
-    "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg",
-    "commit": "commit-wizard",
-    "prepush": "make verify-with-tslint -j3",
-    "prepare": "npx snyk protect || npx snyk protect -d || true",
-    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Financial-Times/n-user-api-client.git"
   },
-  "author": "",
-  "license": "ISC",
+
   "bugs": {
     "url": "https://github.com/Financial-Times/n-user-api-client/issues"
   },
   "homepage": "https://github.com/Financial-Times/n-user-api-client#readme",
+  "engines": {
+    "node": "16.x",
+    "npm": "7.x || 8.x"
+  },
+  "volta": {
+    "node": "16.13.0",
+    "npm": "8.1.3"
+  },
   "devDependencies": {
     "@financial-times/n-gage": "^3.6.0",
     "@types/chai": "^4.1.3",
@@ -41,10 +41,6 @@
     "tslint": "^5.10.0",
     "typescript": "^3.9.6"
   },
-  "engines": {
-    "node": "12.x",
-    "npm": "7.x || 8.x"
-  },
   "dependencies": {
     "@financial-times/n-mask-logger": "^2.1.0",
     "@financial-times/n-memb-gql-client": "^2.2.1",
@@ -54,8 +50,13 @@
     "ramda": "^0.25.0",
     "url": "^0.11.0"
   },
-  "volta": {
-    "node": "12.22.7",
-    "npm": "7.20.2"
+  "scripts": {
+    "test": "make test",
+    "precommit": "node_modules/.bin/secret-squirrel",
+    "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg",
+    "commit": "commit-wizard",
+    "prepush": "make verify-with-tslint -j3",
+    "prepare": "npx snyk protect || npx snyk protect -d || true",
+    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine"
   }
 }
