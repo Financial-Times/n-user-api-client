@@ -14,7 +14,7 @@ describe('loginUser', () => {
 			'(KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36.',
 		apiKey: 'apiKey',
 		apiHost: 'https://api.ft.com',
-		appName: 'login-form',
+		appName: 'login-form'
 	};
 
 	it('resolves with new session data when successful', async () => {

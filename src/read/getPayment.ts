@@ -26,7 +26,7 @@ export const getPaymentDetailsBySession = async (
 		if (!session) {
 			throw new ErrorWithData('Session not supplied', {
 				statusCode: 500,
-				type: errorTypes.VALIDATION,
+				type: errorTypes.VALIDATION
 			});
 		}
 		const res = await canned(
@@ -39,7 +39,7 @@ export const getPaymentDetailsBySession = async (
 			throw new ErrorWithData(defaultErrorMessage, {
 				statusCode: res.status,
 				type: errorTypes.API,
-				errors: res.errors,
+				errors: res.errors
 			});
 		}
 
@@ -55,7 +55,7 @@ export const getPaymentDetailsBySession = async (
 		const e = new ErrorWithData(errorMsg, {
 			api: 'MEMBERSHIP_GRAPHQL',
 			query: graphQlQuery,
-			error,
+			error
 		});
 		logger.error(e);
 		throw e;

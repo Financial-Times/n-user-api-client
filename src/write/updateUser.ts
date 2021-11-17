@@ -7,7 +7,7 @@ import { mergeObjects } from './transforms/merge-two-objects';
 import {
 	GraphQlUserApiResponse,
 	UpdateUserOptions,
-	UserObject,
+	UserObject
 } from '../types';
 import { validateOptions } from '../utils/validate';
 
@@ -16,24 +16,24 @@ const KEY_PROPERTIES = [
 	'apiHost',
 	'apiKey',
 	'apiClientId',
-	'userId',
+	'userId'
 ];
 
 const getUserAndAuthToken = ({
 	session,
 	apiHost,
 	apiClientId,
-	useTestUserApi,
+	useTestUserApi
 }): Promise<[any, any]> => {
 	return Promise.all([
 		getUserBySession(session, useTestUserApi),
-		getAuthToken({ session, apiHost, apiClientId }),
+		getAuthToken({ session, apiHost, apiClientId })
 	]);
 };
 
 const mergeUserUpdateWithFetchedUser = ({
 	userUpdate,
-	userApiResponse,
+	userApiResponse
 }: {
 	userUpdate: UserObject;
 	userApiResponse: GraphQlUserApiResponse;
@@ -43,7 +43,7 @@ const mergeUserUpdateWithFetchedUser = ({
 			'mergeUserUpdateWithFetchedUser not supplied with valid user object or update'
 		);
 	return {
-		user: mergeObjects(userApiResponse.profile, userUpdate.profile),
+		user: mergeObjects(userApiResponse.profile, userUpdate.profile)
 	};
 };
 
@@ -64,13 +64,13 @@ export const changeUserPassword = async (
 		countryCode,
 		userAgent,
 		appName,
-		useTestUserApi,
+		useTestUserApi
 	} = opts;
 	const [userApiResponse, authToken] = await getUserAndAuthToken({
 		session,
 		apiHost,
 		apiClientId,
-		useTestUserApi,
+		useTestUserApi
 	});
 	const password = await updateUserPasswordApi({
 		userId,
@@ -78,7 +78,7 @@ export const changeUserPassword = async (
 		authToken,
 		apiHost,
 		apiKey,
-		appName,
+		appName
 	});
 	return await userLoginApi({
 		email: userApiResponse.profile.email,
@@ -88,7 +88,7 @@ export const changeUserPassword = async (
 		userAgent,
 		apiHost,
 		apiKey,
-		appName,
+		appName
 	});
 };
 
@@ -105,23 +105,23 @@ export const updateUserProfile = async (
 		apiClientId,
 		userId,
 		userUpdate,
-		useTestUserApi,
+		useTestUserApi
 	} = opts;
 	const [userApiResponse, authToken] = await getUserAndAuthToken({
 		session,
 		apiHost,
 		apiClientId,
-		useTestUserApi,
+		useTestUserApi
 	});
 	const updateMergedWithFetchedUser = mergeUserUpdateWithFetchedUser({
 		userUpdate,
-		userApiResponse,
+		userApiResponse
 	});
 	return await updateUserProfileApi({
 		userId,
 		userUpdate: updateMergedWithFetchedUser,
 		authToken,
 		apiHost,
-		apiKey,
+		apiKey
 	});
 };
