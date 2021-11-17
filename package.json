@@ -9,7 +9,8 @@
     "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg",
     "commit": "commit-wizard",
     "prepush": "make verify-with-tslint -j3",
-    "prepare": "npx snyk protect || npx snyk protect -d || true"
+    "prepare": "npx snyk protect || npx snyk protect -d || true",
+    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "@types/ramda": "0.25.28",
     "@types/sinon": "^4.3.3",
     "chai": "^4.1.2",
+    "check-engines": "1.5.0",
     "mocha": "^5.1.1",
     "nock": "^9.2.6",
     "sinon": "^5.0.7",
@@ -40,7 +42,8 @@
     "typescript": "^3.9.6"
   },
   "engines": {
-    "node": "^8.9.4"
+    "node": "12.x",
+    "npm": "7.x || 8.x"
   },
   "dependencies": {
     "@financial-times/n-mask-logger": "^2.1.0",
@@ -50,5 +53,9 @@
     "querystring": "^0.2.0",
     "ramda": "^0.25.0",
     "url": "^0.11.0"
+  },
+  "volta": {
+    "node": "12.22.7",
+    "npm": "7.20.2"
   }
 }
