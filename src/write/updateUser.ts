@@ -48,8 +48,10 @@ const mergeUserUpdateWithFetchedUser = ({
 };
 
 export const changeUserPassword = async (
-	opts: UpdateUserOptions
+	opts?: Partial<UpdateUserOptions>
 ): Promise<any> => {
+	if (typeof opts === 'undefined') throw new Error('Options not supplied');
+
 	validateOptions(opts, 'passwordData', KEY_PROPERTIES);
 	const {
 		session,
@@ -90,7 +92,11 @@ export const changeUserPassword = async (
 	});
 };
 
-export const updateUserProfile = async (opts: UpdateUserOptions): Promise<any> => {
+export const updateUserProfile = async (
+	opts?: Partial<UpdateUserOptions>
+): Promise<any> => {
+	if (typeof opts === 'undefined') throw new Error('Options not supplied');
+
 	validateOptions(opts, 'userUpdate', KEY_PROPERTIES);
 	const {
 		session,

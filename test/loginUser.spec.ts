@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+
 import { loginUser } from '../src/write/loginUser';
 import { loginApi } from './nocks';
 
@@ -8,8 +9,9 @@ describe('loginUser', () => {
 		password: 'password',
 		remoteIp: '127.0.0.1',
 		countryCode: 'IRE',
-		userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' +
-		'(KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36.',
+		userAgent:
+			'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' +
+			'(KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36.',
 		apiKey: 'apiKey',
 		apiHost: 'https://api.ft.com',
 		appName: 'login-form'
@@ -27,7 +29,7 @@ describe('loginUser', () => {
 		try {
 			await loginUser(params);
 		} catch (err) {
-			expect(err.message).to.equal('Could not log user in');
+			expect((err as Error).message).to.equal('Could not log user in');
 		}
 	});
 
@@ -35,7 +37,7 @@ describe('loginUser', () => {
 		try {
 			await loginUser(undefined);
 		} catch (err) {
-			expect(err.message).to.equal('Options not supplied');
+			expect((err as Error).message).to.equal('Options not supplied');
 		}
 	});
 
@@ -43,7 +45,7 @@ describe('loginUser', () => {
 		try {
 			await loginUser(Object.assign({}, params, { email: false }));
 		} catch (err) {
-			expect(err.message).to.equal('Invalid option(s): email');
+			expect((err as Error).message).to.equal('Invalid option(s): email');
 		}
 	});
 });

@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 import * as url from 'url';
 import * as querystring from 'querystring';
 
-import { apiErrorType, ErrorWithData } from '../../utils/error';
+import { isErrorWithData, ErrorWithData } from '../../utils/error';
 import { logger } from '../../utils/logger';
 
 const parseLocationHeader = (res): any => {
@@ -109,6 +109,10 @@ export const getAuthToken = async ({
 
 		return locationHeaderParams.access_token;
 	} catch (error) {
+		if (!isErrorWithData(error)) {
+			throw error;
+		}
+
 		const e = new ErrorWithData(`getAuthToken - ${error.message}`, {
 			url,
 			error

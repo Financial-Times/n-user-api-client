@@ -3,14 +3,14 @@ import { logger } from '../utils/logger';
 import { GraphQlUserApiResponse } from '../types';
 import * as R from 'ramda';
 import { readTransforms } from './transforms';
-import { ErrorWithData, errorTypes } from '../utils/error';
+import { isErrorWithData, ErrorWithData, errorTypes } from '../utils/error';
 import { getSessionData } from './apis/session-service';
 import { validateOptions } from '../utils/validate';
 
 export const getUserBySession = async (
-	session: string,
+	session?: string,
 	testMode?: boolean
-): Promise<GraphQlUserApiResponse> => {
+): Promise<GraphQlUserApiResponse | null> => {
 	const defaultErrorMessage = 'Unable to retrieve user';
 	const graphQlQuery = 'mma-user-by-session';
 	try {
@@ -32,6 +32,10 @@ export const getUserBySession = async (
 		const transformed = readTransforms(user);
 		return transformed;
 	} catch (error) {
+		if (!isErrorWithData(error)) {
+			throw error;
+		}
+
 		const errorMsg = error.data ? error.message : defaultErrorMessage;
 
 		const e = new ErrorWithData(errorMsg, {

@@ -26,3 +26,8 @@ export function apiErrorType(statusCode: number) {
 		}[statusCode] || errorTypes.API
 	);
 }
+
+// type predicate for ErrorWithData
+export function isErrorWithData(error: any): error is ErrorWithData {
+	return error.message !== undefined;
+}
