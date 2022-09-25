@@ -49,7 +49,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@financial-times/n-mask-logger": "6.0.0",
+    "@financial-times/n-mask-logger": "7.2.0",
     "@financial-times/n-memb-gql-client": "2.2.3",
     "isomorphic-fetch": "^3.0.0",
     "querystring": "^0.2.0",
