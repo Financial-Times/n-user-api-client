@@ -6,11 +6,14 @@ plugins:
   - '@dotcom-tool-kit/husky-npm'
 hooks:
   test:local:
+    - Eslint
     - Mocha
   test:ci:
+    - Eslint
     - Mocha
 options:
   "@dotcom-tool-kit/mocha": {}
   "@dotcom-tool-kit/eslint": {}
   "@dotcom-tool-kit/prettier": {}
   "@dotcom-tool-kit/circleci": {}
+ 
