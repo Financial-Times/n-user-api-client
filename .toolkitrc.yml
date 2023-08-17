@@ -4,7 +4,10 @@ plugins:
   - "@dotcom-tool-kit/eslint"
   - "@dotcom-tool-kit/prettier"
   - '@dotcom-tool-kit/husky-npm'
+  - '@dotcom-tool-kit/typescript'
 hooks:
+  build:local:
+    - TypeScriptBuild
   test:local:
     - Eslint
     - Mocha
