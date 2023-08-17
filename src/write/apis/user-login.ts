@@ -3,7 +3,16 @@ import 'isomorphic-fetch';
 import { apiErrorType, ErrorWithData } from '../../utils/error';
 import { logger } from '../../utils/logger';
 
-export const userLoginApi = async ({ email, password, remoteIp, countryCode, userAgent, apiHost, apiKey, appName }) => {
+export const userLoginApi = async ({
+	email,
+	password,
+	remoteIp,
+	countryCode,
+	userAgent,
+	apiHost,
+	apiKey,
+	appName
+}) => {
 	const errorMsg = 'Could not log user in';
 	const url = `${apiHost}/idm/v1/reauthenticate`;
 	try {
@@ -15,10 +24,10 @@ export const userLoginApi = async ({ email, password, remoteIp, countryCode, use
 			password,
 			rememberMe: true,
 			context: {
-				'remoteIp': remoteIp,
-				'countryCode': countryCode,
-				'userAgent': userAgent,
-				'platform': 'n-user-api-client'
+				remoteIp: remoteIp,
+				countryCode: countryCode,
+				userAgent: userAgent,
+				platform: 'n-user-api-client'
 			}
 		};
 		const options = {

@@ -4,14 +4,16 @@ import * as R from 'ramda';
 
 const selectValueInList = (list: SimpleList, userValue: string): SimpleList => {
 	if (!userValue) return list;
-	return list.map((item: SimpleListItem): SimpleListItem => ({
-		description: item.description,
-		code: item.code,
-		selected: item.code === userValue
-	}));
+	return list.map(
+		(item: SimpleListItem): SimpleListItem => ({
+			description: item.description,
+			code: item.code,
+			selected: item.code === userValue
+		})
+	);
 };
 
-export const addListsToUserData = userData => {
+export const addListsToUserData = (userData) => {
 	const demographics = filterDemographicsLists();
 	const positionCode =
 		userData.profile.demographics.position &&

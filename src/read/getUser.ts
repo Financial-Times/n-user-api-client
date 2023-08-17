@@ -20,7 +20,11 @@ export const getUserBySession = async (
 				type: errorTypes.VALIDATION
 			});
 		}
-		const res = await canned(graphQlQuery, { session }, { timeout: 10000, testMode });
+		const res = await canned(
+			graphQlQuery,
+			{ session },
+			{ timeout: 10000, testMode }
+		);
 		const user = R.path(['data', 'user'], res);
 		if (!res._ok || !user) {
 			throw new ErrorWithData(defaultErrorMessage, {

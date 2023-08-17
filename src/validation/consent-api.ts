@@ -22,11 +22,7 @@ export function validateConsent(
 	source: string
 ): ConsentAPI.ConsentChannel {
 	consent.source = consent.source || source;
-	const { error, value } = Joi.validate(
-		consent,
-		consentSchema,
-		joiOptions
-	);
+	const { error, value } = Joi.validate(consent, consentSchema, joiOptions);
 
 	if (error) {
 		throw validationError(error);
@@ -54,7 +50,7 @@ export function validateConsentRecord(
 interface DestructuredConsent {
 	category: string;
 	channel: string;
-	consent: ConsentAPI.ConsentChannel
+	consent: ConsentAPI.ConsentChannel;
 }
 
 export function destructureConsentFromRecord(
@@ -63,7 +59,7 @@ export function destructureConsentFromRecord(
 	const category = Object.keys(consentRecord)[0];
 	const channel = Object.keys(consentRecord[category])[0];
 	const consent = consentRecord[category][channel];
-	return { category, channel, consent};
+	return { category, channel, consent };
 }
 
 export const ConsentValidator = { consentSchema, consentRecordSchema };

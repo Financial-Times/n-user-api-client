@@ -11,15 +11,18 @@ export const getSessionData = async (
 ) => {
 	const url = `${apiHost}/sessions/s/${session}`;
 	const errorMsg = 'Could not get session data';
-	const options = Object.assign({
-		timeout: 3000,
-		headers: {
-			'Content-Type': 'application/json',
-			'X-Api-Key': apiKey
+	const options = Object.assign(
+		{
+			timeout: 3000,
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Api-Key': apiKey
+			},
+			method: 'GET',
+			agent
 		},
-		method: 'GET',
-		agent
-	}, requestOptions);
+		requestOptions
+	);
 
 	const response = await fetch(url, options);
 	if (response.ok) {

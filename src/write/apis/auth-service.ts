@@ -33,9 +33,7 @@ const parseErrorFromLocationHeader = (locationHeaderParams): Error | null => {
 			errorType = 'OTHER';
 		}
 		return new ErrorWithData(
-			`Auth service - ${locationHeaderParams.error}: ${
-				locationHeaderParams.error_description
-			}`,
+			`Auth service - ${locationHeaderParams.error}: ${locationHeaderParams.error_description}`,
 			{
 				type: errorType,
 				error: locationHeaderParams.error,
@@ -102,9 +100,8 @@ export const getAuthToken = async ({
 		if (responseCodeError) throw responseCodeError;
 
 		const locationHeaderParams = parseLocationHeader(res);
-		const locationHeaderError = parseErrorFromLocationHeader(
-			locationHeaderParams
-		);
+		const locationHeaderError =
+			parseErrorFromLocationHeader(locationHeaderParams);
 		if (locationHeaderError) throw locationHeaderError;
 
 		return locationHeaderParams.access_token;

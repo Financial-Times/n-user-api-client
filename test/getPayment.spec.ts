@@ -35,17 +35,16 @@ describe('getPayment', () => {
 
 		it('handles exception thrown within canned query', async () => {
 			graphQlPaymentBySession({ responseType, statusCode: 500 });
-			return getPaymentDetailsBySession(session)
-				.catch(err =>
-					expect(err.message).to.equal('Unable to retrieve payment details'));
+			return getPaymentDetailsBySession(session).catch((err) =>
+				expect(err.message).to.equal('Unable to retrieve payment details')
+			);
 		});
 
-		it('throws if no session supplied', done => {
-			getPaymentDetailsBySession(undefined)
-				.catch(err => {
-					expect(err.message).to.equal('Session not supplied');
-					done();
-				});
+		it('throws if no session supplied', (done) => {
+			getPaymentDetailsBySession(undefined).catch((err) => {
+				expect(err.message).to.equal('Session not supplied');
+				done();
+			});
 		});
 	});
 });

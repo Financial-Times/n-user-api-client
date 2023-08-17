@@ -1,6 +1,10 @@
 import 'isomorphic-fetch';
 
-import { isErrorWithData, apiErrorType, ErrorWithData } from '../../utils/error';
+import {
+	isErrorWithData,
+	apiErrorType,
+	ErrorWithData
+} from '../../utils/error';
 import { logger } from '../../utils/logger';
 
 export const updateUserProfileApi = async ({

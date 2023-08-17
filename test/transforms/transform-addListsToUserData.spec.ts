@@ -10,35 +10,35 @@ describe('Transform My Account data for display', () => {
 		userData = userName(apiResponse);
 	});
 
-	it('retains existing fields under the \'profile\' block', () => {
+	it("retains existing fields under the 'profile' block", () => {
 		const transformed = addListsToUserData(userData);
-		Object.keys(userData.profile).forEach(key => {
+		Object.keys(userData.profile).forEach((key) => {
 			if (key !== 'demographics')
 				expect(transformed.profile[key]).to.equal(userData.profile[key]);
 		});
 	});
 
-	it('adds a list of titles with the user\'s value selected', () => {
+	it("adds a list of titles with the user's value selected", () => {
 		const transformed = addListsToUserData(userData);
 		expect(transformed.profile.titles.length).to.equal(7);
 		expect(
 			transformed.profile.titles.find(
-				title => title.description === userData.profile.title
+				(title) => title.description === userData.profile.title
 			).selected
 		).to.be.true;
 	});
 
-	it('adds a list of active positions with the user\'s value selected', () => {
+	it("adds a list of active positions with the user's value selected", () => {
 		const transformed = addListsToUserData(userData);
 		expect(transformed.profile.demographics.positions.length).to.equal(16);
 		expect(
 			transformed.profile.demographics.positions.every(
-				position => position.description
+				(position) => position.description
 			)
 		).to.be.true;
 		expect(
 			transformed.profile.demographics.positions.find(
-				position =>
+				(position) =>
 					position.code === userData.profile.demographics.position.code
 			).selected
 		).to.be.true;
@@ -49,12 +49,12 @@ describe('Transform My Account data for display', () => {
 		expect(transformed.profile.demographics.industries.length).to.equal(26);
 		expect(
 			transformed.profile.demographics.industries.every(
-				industry => industry.description
+				(industry) => industry.description
 			)
 		).to.be.true;
 		expect(
 			transformed.profile.demographics.industries.find(
-				industry =>
+				(industry) =>
 					industry.code === userData.profile.demographics.industry.code
 			).selected
 		).to.be.true;
@@ -67,12 +67,12 @@ describe('Transform My Account data for display', () => {
 		);
 		expect(
 			transformed.profile.demographics.responsibilities.every(
-				responsibility => responsibility.description
+				(responsibility) => responsibility.description
 			)
 		).to.be.true;
 		expect(
 			transformed.profile.demographics.responsibilities.find(
-				responsibility =>
+				(responsibility) =>
 					responsibility.code ===
 					userData.profile.demographics.responsibility.code
 			).selected
@@ -85,7 +85,7 @@ describe('Transform My Account data for display', () => {
 		expect(transformed.profile.demographics.positions.length).to.equal(16);
 		expect(
 			transformed.profile.demographics.positions.find(
-				position => position.selected
+				(position) => position.selected
 			)
 		).to.be.undefined;
 	});
@@ -96,7 +96,7 @@ describe('Transform My Account data for display', () => {
 		expect(transformed.profile.demographics.industries.length).to.equal(26);
 		expect(
 			transformed.profile.demographics.industries.find(
-				industry => industry.selected
+				(industry) => industry.selected
 			)
 		).to.be.undefined;
 	});
@@ -109,7 +109,7 @@ describe('Transform My Account data for display', () => {
 		);
 		expect(
 			transformed.profile.demographics.responsibilities.find(
-				responsibility => responsibility.selected
+				(responsibility) => responsibility.selected
 			)
 		).to.be.undefined;
 	});
