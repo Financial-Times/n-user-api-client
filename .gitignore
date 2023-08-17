@@ -4,7 +4,6 @@ bower_components
 # Optional npm cache directory
 .npm
 
-package-lock.json
 node_modules
 *.env*
 dist
