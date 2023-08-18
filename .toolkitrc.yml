@@ -10,10 +10,11 @@ hooks:
     - TypeScriptBuild
   test:local:
     - Eslint
-    - Mocha
     - TypeScriptTest
+    - Mocha
   test:ci:
     - Eslint
+    - TypeScriptTest
     - Mocha
 options:
   "@dotcom-tool-kit/mocha": {}
