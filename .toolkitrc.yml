@@ -1,0 +1,23 @@
+plugins:
+  - "@dotcom-tool-kit/component"
+  - "@dotcom-tool-kit/mocha"
+  - "@dotcom-tool-kit/eslint"
+  - "@dotcom-tool-kit/prettier"
+  - '@dotcom-tool-kit/husky-npm'
+  - '@dotcom-tool-kit/typescript'
+hooks:
+  build:local:
+    - TypeScriptBuild
+  test:local:
+    - Eslint
+    - Mocha
+    - TypeScriptTest
+  test:ci:
+    - Eslint
+    - Mocha
+options:
+  "@dotcom-tool-kit/mocha": {}
+  "@dotcom-tool-kit/eslint": {}
+  "@dotcom-tool-kit/prettier": {}
+  "@dotcom-tool-kit/circleci": {}
+ 

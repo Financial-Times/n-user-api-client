@@ -17,9 +17,7 @@ interface MembQlOptions {
 export class GraphQlAPI {
 	protected options: MembQlOptions;
 
-	constructor(
-		protected mode: APIMode = APIMode.Production
-	) {
+	constructor(protected mode: APIMode = APIMode.Production) {
 		this.options = {
 			testMode: mode === APIMode.Test,
 			mockMode: mode === APIMode.Mock

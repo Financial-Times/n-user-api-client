@@ -12,7 +12,8 @@ const consentUnit = consentRecordResponse.data[test.category][test.channel];
 
 describe('ConsentValidator - consent API validation', () => {
 	it('should destructure consent from a record', () => {
-		const { category, channel, consent } = ConsentValidator.destructureConsentFromRecord(consentRecord);
+		const { category, channel, consent } =
+			ConsentValidator.destructureConsentFromRecord(consentRecord);
 		expect(category).to.equal(test.category);
 		expect(channel).to.equal(test.channel);
 		expect(consent).to.equal(consentUnit);
@@ -32,20 +33,16 @@ describe('ConsentValidator - consent API validation', () => {
 
 		it('should decorate consent with source if not specified', () => {
 			delete consent.source;
-			expect(ConsentValidator.validateConsent(consent, test.source))
-				.to.have.property(
-					'source',
-					test.source
-				);
+			expect(
+				ConsentValidator.validateConsent(consent, test.source)
+			).to.have.property('source', test.source);
 		});
 
 		it('should not overwrite consent source', () => {
 			consent.source = `${test.source}Original`;
-			expect(ConsentValidator.validateConsent(consent, test.source))
-				.to.have.property(
-					'source',
-					`${test.source}Original`
-				);
+			expect(
+				ConsentValidator.validateConsent(consent, test.source)
+			).to.have.property('source', `${test.source}Original`);
 		});
 
 		it('should error for invalid consent payloads', async () => {
@@ -59,14 +56,20 @@ describe('ConsentValidator - consent API validation', () => {
 
 		it('should strip consent payloads of invalid properties', async () => {
 			consent.invalidProperty = 'foo';
-			const validConsent = await ConsentValidator.validateConsent(consent, test.source);
+			const validConsent = await ConsentValidator.validateConsent(
+				consent,
+				test.source
+			);
 			delete consent.invalidProperty;
 			expect(validConsent).to.deep.equal(consent);
 		});
 
 		it('should default lbi:false on consent payloads', async () => {
 			delete consent.lbi;
-			const validConsent = await ConsentValidator.validateConsent(consent, test.source);
+			const validConsent = await ConsentValidator.validateConsent(
+				consent,
+				test.source
+			);
 			consent.lbi = false;
 			expect(validConsent).to.deep.equal(consent);
 		});
@@ -79,14 +82,15 @@ describe('ConsentValidator - consent API validation', () => {
 						source: test.source,
 						status: true,
 						unknownProperty: true
-					},
+					}
 				}
 			};
-			const validConsent = await ConsentValidator.validateConsentRecord(consent);
+			const validConsent = await ConsentValidator.validateConsentRecord(
+				consent
+			);
 			delete consent.category.channel.unknownProperty;
 			consent.category.channel.lbi = false;
 			expect(validConsent).to.deep.equal(consent);
 		});
 	});
-
 });

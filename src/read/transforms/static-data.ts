@@ -1,9 +1,9 @@
 const demographics = require('../../../demographics-data/demographics.json');
 
 export const filterDemographicsLists = () => ({
-	positions: demographics.positions.filter(item => item.active),
-	responsibilities: demographics.responsibilities.filter(item => item.active),
-	industries: demographics.industries.filter(item => item.active)
+	positions: demographics.positions.filter((item) => item.active),
+	responsibilities: demographics.responsibilities.filter((item) => item.active),
+	industries: demographics.industries.filter((item) => item.active)
 });
 
 export const titles = [

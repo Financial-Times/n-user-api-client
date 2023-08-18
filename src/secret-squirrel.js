@@ -6,7 +6,7 @@ module.exports = {
 	strings: {
 		deny: [],
 		denyOverrides: [
-			'test@mail\\.com', // test/loginUser.spec.js
+			'test@mail\\.com' // test/loginUser.spec.js
 		]
 	}
 };

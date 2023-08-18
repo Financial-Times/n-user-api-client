@@ -1,6 +1,6 @@
 import { ErrorWithData, errorTypes } from '../../utils/error';
 
-export const isSessionStale = sessionCreationTime => {
+export const isSessionStale = (sessionCreationTime) => {
 	const now = Date.now();
 	if (
 		typeof sessionCreationTime !== 'number' ||

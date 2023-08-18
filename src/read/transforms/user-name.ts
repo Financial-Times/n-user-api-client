@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-export const userName = user => {
+export const userName = (user) => {
 	let transformed = R.clone(user);
 	transformed.profile.title = R.path(['profile', 'name', 'title'], transformed);
 	transformed.profile.firstName = R.path(
