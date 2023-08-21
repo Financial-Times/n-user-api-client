@@ -47,7 +47,7 @@
     "check-engines": "1.5.0",
     "dotcom-tool-kit": "^3.2.1",
     "mocha": "^10.2.0",
-    "nock": "^9.2.6",
+    "nock": "^13.3.3",
     "sinon": "^5.0.7",
     "snyk": "^1.168.0",
     "ts-node": "^5.0.1",
@@ -64,7 +64,7 @@
     "url": "^0.11.0"
   },
   "scripts": {
-    "test": "dotcom-tool-kit test:local",
+    "test": "NODE_OPTIONS='--no-experimental-fetch' dotcom-tool-kit test:local",
     "prepare": "npx snyk protect || npx snyk protect -d || true",
     "build": "dotcom-tool-kit build:local",
     "start": "dotcom-tool-kit run:local",
