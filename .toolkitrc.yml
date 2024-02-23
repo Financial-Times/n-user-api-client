@@ -3,8 +3,8 @@ plugins:
   - "@dotcom-tool-kit/mocha"
   - "@dotcom-tool-kit/eslint"
   - "@dotcom-tool-kit/prettier"
-  - '@dotcom-tool-kit/husky-npm'
-  - '@dotcom-tool-kit/typescript'
+  - "@dotcom-tool-kit/husky-npm"
+  - "@dotcom-tool-kit/typescript"
 hooks:
   build:local:
     - TypeScriptBuild
@@ -14,10 +14,6 @@ hooks:
     - Mocha
   test:ci:
     - Eslint
-    - TypeScriptTest
     - Mocha
 options:
-  "@dotcom-tool-kit/mocha": {}
-  "@dotcom-tool-kit/eslint": {}
-  "@dotcom-tool-kit/prettier": {}
   "@dotcom-tool-kit/circleci": { nodeVersion: [ '18.17', '16.20' ] }
