@@ -55,7 +55,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@dotcom-reliability-kit/logger": "^2.2.7",
+    "@dotcom-reliability-kit/logger": "^3.0.0",
     "@financial-times/n-memb-gql-client": "^2.2.4",
     "isomorphic-fetch": "^3.0.0",
     "joi": "10.6.0",
