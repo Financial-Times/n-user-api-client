@@ -1,13 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "commonjs",
+    "lib": ["esnext", "dom"],
+    "module": "node16",
+    "target": "es2022",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node16",
+
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,
     "removeComments": true,
-    "lib": ["es2017", "dom"],
     "noImplicitAny": false
   },
   "exclude": ["node_modules", "dist", "test"]
